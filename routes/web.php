@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MerchantController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -14,8 +15,5 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
+Route::get('/', [MerchantController::class, 'index']);
 Route::get('/test-mail', [UserController::class, 'testmail']);
