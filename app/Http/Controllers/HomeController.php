@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 
-class MerchantController extends Controller {
+class HomeController extends Controller {
     public function index() {
-        return view('merchant/index');
+        return view('index');
     }
 }
