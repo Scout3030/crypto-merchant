@@ -25,6 +25,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('auth.showRegistrationForm');
 Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
 Route::get('/register/verify/{code}', [AuthController::class, 'verify']);
+Route::get('/login/verify', [AuthController::class, 'verifyLogin'])->middleware('otp.token');
+Route::post('/login/verify', [AuthController::class, 'verifyLoginToken'])->middleware('otp.token')->name('auth.login.verify');
 Route::name('merchant.')->prefix('merchant')->middleware('auth')->group(function () {
     Route::get('/', [MerchantController::class, 'index'])->name('index');
 });
