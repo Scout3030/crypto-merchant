@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class NewAccountMail extends Mailable
+class AccountActivatedMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -30,6 +30,6 @@ class NewAccountMail extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.account_verify');
+        return $this->view('emails.account_activated');
     }
 }
