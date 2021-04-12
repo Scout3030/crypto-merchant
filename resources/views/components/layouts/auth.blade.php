@@ -13,7 +13,7 @@
     <div class="container h-100">
         <div class="row justify-content-center h-100 align-items-center">
             <div class="col-lg-6 col-md-4">
-                <img class="logoLogin" src="img/logo.png" alt="">
+                <img class="logoLogin" src="{{ asset('img/logo.png') }}" alt="">
             </div>
             <div class="col-lg-6 col-md-8">
                 <div class="contLogin w-100">
