@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Mail\AccountActivatedMail;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Http\Request;
-
-use App\Traits\AuthenticatesUsers;
-use App\Traits\RegistersUsers;
-use App\Mail\NewAccountMail;
 use stdClass;
-
 use App\Models\User;
+use App\Mail\SendOTPToken;
+use Illuminate\Support\Str;
+use App\Mail\NewAccountMail;
+use Illuminate\Http\Request;
+use App\Traits\RegistersUsers;
 use Illuminate\Validation\Rule;
+
+use App\Mail\AccountActivatedMail;
+use App\Traits\AuthenticatesUsers;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller {
     use AuthenticatesUsers, RegistersUsers;
@@ -123,7 +124,48 @@ class AuthController extends Controller {
         ]);
     }
 
+    public function login(Request $request)
+    {
+        $this->validateLogin($request);
+        session()->put('user-email', $request->email);
+        $user = User::whereEmail($request->email)->first();
+        if (Hash::check($request->password, $user->password)) {
+            $token = Str::random(5);
+            $user->fill([
+                'otp_token' => $token, 
+                'token_status' => User::ACTIVED_TOKEN
+            ])->save();
+            try {
+                Mail::to($user->email)->send(new SendOTPToken($token));
+            } catch (\Throwable $th) {
+                return back()->withErrors('An error occurred while sending the verification email.');
+            }
 
+            return back()->with('message', true);
+        }
+        return back()->withErrors('Incorrect credentials.');
+    }
 
+    public function verifyLogin()
+    {
+        return view('auth.login_otp_token');
+    }
 
+    public function verifyLoginToken(Request $request)
+    {
+        $otp_token = $request->otp_token;
+        $email = session()->get('user-email');
+        $user = User::whereEmail($email)->first();
+        if($user->otp_token == $otp_token && $user->token_status == (string) User::ACTIVED_TOKEN){
+            $user->fill([
+                'otp_token' => null,
+                'token_status' => User::INACTIVED_TOKEN
+            ])->save();
+
+            Auth::loginUsingId($user->id);
+            session()->forget('user-email');
+            return redirect('/merchant');   
+        }
+        return back()->withErrors('An error occurred while sending the verification email.');
+    }
 }
