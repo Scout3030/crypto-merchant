@@ -54,7 +54,7 @@ class AuthController extends Controller {
         $obj->email = $user->email;
 
         try {
-            Mail::to('coding.zerones@gmail.com')->send(new NewAccountMail($obj));
+            Mail::to($user->email)->send(new NewAccountMail($obj));
 
         } catch (\Throwable $th) {
             return back()->withErrors('An error occurred while sending the verification email.');
@@ -93,7 +93,7 @@ class AuthController extends Controller {
         $obj->password = $password;
 
         try {
-            Mail::to('coding.zerones@gmail.com')->send(new AccountActivatedMail($obj));
+            Mail::to($user->email)->send(new AccountActivatedMail($obj));
 
         } catch (\Throwable $th) {
             return back()->withErrors('An error occurred while sending the verification email.');

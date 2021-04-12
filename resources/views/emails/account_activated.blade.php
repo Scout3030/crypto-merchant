@@ -3,7 +3,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta content="width=device-width" name="viewport"/>
-  <title>Documento sin título</title>
+  <title>CryptoMatix</title>
   <style>
     body {
       font-family: arial;
