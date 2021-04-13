@@ -3,7 +3,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta content="width=device-width" name="viewport"/>
-  <title>Documento sin título</title>
+  <title>CryptoMatix</title>
   <style>
     body {
       font-family: arial;
@@ -28,24 +28,15 @@
       border-top: 3px solid #cecece;
       color: #6d6d6d;
     }
-    .btn {
-        display: inline-block;
-        font-weight: 400;
-        line-height: 1.5;
-        text-align: center;
-        text-decoration: none;
-        vertical-align: middle;
-        cursor: pointer;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        user-select: none;
-        padding: .375rem .75rem;
-        font-size: 1rem;
-        border-radius: .25rem;
-        transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-        color: #fff;
-        background-color: #198754;
-        border-color: #198754;
+    a.btn {
+      background-color: #71bf7e;
+      color: #fff;
+      font-weight: 600;
+      padding: 12px 24px;
+      border-radius: 10px;
+      text-decoration: none;
+      min-width: 240px;
+      display: inline-block;
     }
   </style>
 </head>
@@ -58,12 +49,10 @@
   </tr>
   <tr class="content">
     <td>
-    	<p>Thanks for signing up!<br>
-            Please verify your email address by <br>
-            clicking the button below
-        </p>
+    	<p>Thanks for singning up!<br>
+      Please verify your email address by clicking the button below</p>
       <br>
-      <a href="{{ url('/register/verify/' . $data->confirmation_code) }}" class="btn">ACTIVATE YOUR ACCOUNT</a>
+      <p><a class="btn" href="{{ url('/register/verify/' . $data->confirmation_code) }}">ACTIVATE YOUR ACCOUNT</a></p>
       <br>
       <br>
       <p>Thanks,<br>
