@@ -131,10 +131,12 @@ class AuthController extends Controller {
         $user = User::whereEmail($request->email)->first();
         if (Hash::check($request->password, $user->password)) {
             $token = Str::random(5);
+
             $user->fill([
-                'otp_token' => $token, 
+                'otp_token' => $token,
                 'token_status' => (string) User::ACTIVED_TOKEN
             ])->save();
+
             try {
                 Mail::to($user->email)->send(new SendOTPToken($token));
             } catch (\Throwable $th) {
@@ -152,19 +154,16 @@ class AuthController extends Controller {
         $email = session()->get('user-email');
         $user = User::whereEmail($email)->first();
         if($user->otp_token == $otp_token && $user->token_status == (string) User::ACTIVED_TOKEN){
+
             $user->fill([
                 'otp_token' => null,
-                'token_status' => User::INACTIVED_TOKEN
+                'token_status' => (string) User::INACTIVED_TOKEN
             ])->save();
+
 
             Auth::loginUsingId($user->id);
             session()->forget('user-email');
-            
-            if($user->first_login == (string) User::YES){
-                return redirect()->route('auth.change.password');
-            }
-
-            return redirect('/merchant');   
+            return redirect('/merchant');
         }
         return back()->withErrors('An error occurred while sending the verification email.');
     }
