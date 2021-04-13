@@ -39,11 +39,6 @@ Route::middleware('auth')->group(function () {
     Route::view('/change/password', 'auth.change-password')->name('auth.change.password');
     Route::put('/change/password', [AuthController::class, 'updatePassword'])->name('auth.update.password');
 
-    // Merchant
-    Route::name('merchant.')->prefix('merchant')->group(function () {
-        Route::get('/', [MerchantController::class, 'index'])->name('index');
-    });
-
     // KYC
     Route::name('kyc.')->prefix('kyc')->group(function () {
         Route::get('/create', [UserKycApplicationsController::class, 'create'])->name('create');
