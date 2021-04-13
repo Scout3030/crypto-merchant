@@ -4,8 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MerchantController;
-//use App\Http\Controllers\UserController;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\UserKycApplicationsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +26,10 @@ Route::post('/register', [AuthController::class, 'register'])->name('auth.regist
 Route::get('/register/verify/{code}', [AuthController::class, 'verify']);
 Route::view('/login/verify', 'auth.login_otp_token')->middleware('otp.token');
 Route::post('/login/verify', [AuthController::class, 'verifyLoginToken'])->middleware('otp.token')->name('auth.login.verify');
+Route::get('/forgot-password', [AuthController::class, 'showForgotPasswordForm'])->name('auth.showForgotPasswordForm');
+Route::post('/forgot-password', [AuthController::class, 'sendPasswordResetEmail'])->name('auth.sendPasswordResetEmail');
+Route::get('/reset-password', [AuthController::class, 'showPasswordResetForm'])->name('auth.showPasswordResetForm');
+Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('auth.resetPassword');
 
 Route::group(['middleware' => ['auth']], function () {
     Route::view('/change/password', 'auth.change-password')->name('auth.change.password');
@@ -36,4 +39,7 @@ Route::group(['middleware' => ['auth']], function () {
 Route::name('merchant.')->prefix('merchant')->middleware('auth')->group(function () {
     Route::get('/', [MerchantController::class, 'index'])->name('index');
 });
-//Route::get('/test-mail', [UserController::class, 'testmail']);
+Route::name('kyc.')->prefix('kyc')->middleware('auth')->group(function () {
+    Route::get('/create', [UserKycApplicationsController::class, 'create'])->name('kyc.create');
+    Route::post('/', [UserKycApplicationsController::class, 'store'])->name('kyc.store');
+});

@@ -34,7 +34,7 @@
         <div class="mb-3 form-check">
             <input type="checkbox" name="remember" class="form-check-input">
             <label class="form-check-label">Remember Me</label>
-            <a class="forgotPass" href="#">Forgot Password?</a>
+            <a class="forgotPass" href="{{ route('auth.showForgotPasswordForm') }}">Forgot Password?</a>
         </div>
         <button type="submit" class="btn btn-primary">Sign In</button>
         <div id="emailHelp" class="form-text">Don't have an account? <a href="{{ route('auth.showRegistrationForm') }}">Register</a></div>

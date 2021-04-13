@@ -59,12 +59,12 @@
   <tr class="content">
     <td>
     	<p>In order to make your login attempt<br>
-      successful, Please use the following OTP:</p>
+      successful, please use the following OTP:</p>
       <br>
       <p><b>{{ $otp_token }}</b></p>
       <br>
       <br>
-      <a href="{{ url('/login/verify') }}" class="btn btn-info">SIGN IN</a>
+      <a class="btn btn-info" href="{{ url('/login/verify') }}" target="_blank" rel="noopener noreferrer">SIGN IN</a>
       <p>Thanks,<br>
       The Cryptomatix Team</p>
     </td>

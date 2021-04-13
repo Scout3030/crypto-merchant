@@ -1,3 +1,6 @@
 <x-layouts.merchant>
-    <h1>Welcome</h1>
+    <div class="container">
+        <x-widgets.header />
+        <h1>Welcome</h1>
+    </div>
 </x-layouts.merchant>

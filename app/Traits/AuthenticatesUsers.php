@@ -79,7 +79,7 @@ trait AuthenticatesUsers
     protected function attemptLogin(Request $request)
     {
         return $this->guard()->attempt(
-            $this->credentials($request), $request->filled('remember')
+            $this->getAuthorizationCredentials($request), $request->filled('remember')
         );
     }
 
@@ -89,7 +89,7 @@ trait AuthenticatesUsers
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    protected function credentials(Request $request)
+    protected function getAuthorizationCredentials(Request $request)
     {
         return $request->only($this->username(), 'password');
     }
