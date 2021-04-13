@@ -5,7 +5,7 @@
 
     <ul class="nav nav-pills">
         <li class="nav-item">
-            <a href="#" class="nav-link active">Home</a>
+            <a href="/" class="nav-link active">Home</a>
         </li>
         <li class="nav-item">
             <a href="#" class="nav-link">Features</a>
@@ -15,8 +15,11 @@
         </li>
         @auth
         <li class="nav-item">
+            <a href="{{ route('merchant.index') }}" class="nav-link">Dashboard</a>
+        </li>
+        <li class="nav-item">
             <a href="{{ route('auth.logout') }}" class="nav-link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-            <form id="logout-form" action="{{ route('logout') }}" class="d-none" method="POST">
+            <form id="logout-form" action="{{ route('auth.logout') }}" class="d-none" method="POST">
                 @csrf
             </form>
         </li>
