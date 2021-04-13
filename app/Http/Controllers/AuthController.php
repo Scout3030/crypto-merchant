@@ -56,11 +56,11 @@ class AuthController extends Controller {
 
         try {
             Mail::to($user->email)->send(new NewAccountMail($obj));
+        } catch (\Throwable $e) {
+            report($e);
 
-        } catch (\Throwable $th) {
             return back()->withErrors('An error occurred while sending the verification email.');
         }
-
 
         return back()->with('success', true);
     }
@@ -96,7 +96,9 @@ class AuthController extends Controller {
         try {
             Mail::to($user->email)->send(new AccountActivatedMail($obj));
 
-        } catch (\Throwable $th) {
+        } catch (\Throwable $e) {
+            report($e);
+
             return back()->withErrors('An error occurred while sending the verification email.');
         }
 
@@ -139,12 +141,15 @@ class AuthController extends Controller {
 
             try {
                 Mail::to($user->email)->send(new SendOTPToken($token));
-            } catch (\Throwable $th) {
+            } catch (\Throwable $e) {
+                report($e);
+
                 return back()->withErrors('An error occurred while sending the verification email.');
             }
 
             return back()->with('message', true);
         }
+
         return back()->withErrors('Incorrect credentials.');
     }
 
