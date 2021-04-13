@@ -30,7 +30,8 @@ class SendOTPToken extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.send_otp_token')
+        return $this->subject(__("One Time Password Verification"))
+                    ->view('emails.send_otp_token')
                     ->with(['otp_token' => $this->otpToken]);
     }
 }

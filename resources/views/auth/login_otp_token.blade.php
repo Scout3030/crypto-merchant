@@ -1,6 +1,6 @@
 <x-layouts.auth>
-    <h2>Enter the OTP</h2>
-    <p>Don't have an account? Create your account, it takes less than a minute</p>
+    <h2>One Time Password</h2>
+    <p>Enter the OTP, you have recieved at your registered email address</p>
 
     <form class="formLogin" action="{{ route('auth.login.verify') }}" method="POST">
         @csrf
@@ -25,9 +25,9 @@
 
 
         <div class="mb-3">
-            <label class="form-label">OTP</label>
+            <label class="form-label">One Time Password</label>
             <input type="text" name="otp_token" class="form-control" placeholder="Enter the OTP" required>
         </div>
-        <button type="submit" class="btn btn-primary">Send</button>
+        <button type="submit" class="btn btn-primary">Verify</button>
     </form>
 </x-layouts.auth>

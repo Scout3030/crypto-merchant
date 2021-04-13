@@ -133,7 +133,7 @@ class AuthController extends Controller {
             $token = Str::random(5);
             $user->fill([
                 'otp_token' => $token, 
-                'token_status' => User::ACTIVED_TOKEN
+                'token_status' => (string) User::ACTIVED_TOKEN
             ])->save();
             try {
                 Mail::to($user->email)->send(new SendOTPToken($token));
@@ -144,11 +144,6 @@ class AuthController extends Controller {
             return back()->with('message', true);
         }
         return back()->withErrors('Incorrect credentials.');
-    }
-
-    public function verifyLogin()
-    {
-        return view('auth.login_otp_token');
     }
 
     public function verifyLoginToken(Request $request)
@@ -164,8 +159,24 @@ class AuthController extends Controller {
 
             Auth::loginUsingId($user->id);
             session()->forget('user-email');
+            
+            if($user->first_login == (string) User::YES){
+                return redirect()->route('auth.change.password');
+            }
+
             return redirect('/merchant');   
         }
         return back()->withErrors('An error occurred while sending the verification email.');
+    }
+
+    public function updatePassword(){
+        $this->validate(request(), [
+			'password' => ['confirmed']
+		]);
+
+		$user = auth()->user();
+		$user->password = bcrypt(request('password'));
+		$user->save();
+        return redirect('/merchant'); 
     }
 }
