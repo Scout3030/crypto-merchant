@@ -15,6 +15,7 @@ use App\Mail\AccountActivatedMail;
 use App\Mail\NewAccountMail;
 use App\Mail\SendOTPToken;
 use App\Models\User;
+use App\Rules\StrengthPassword;
 use App\Traits\AuthenticatesUsers;
 use App\Traits\RegistersUsers;
 use App\Traits\ResetsPasswords;
@@ -124,7 +125,7 @@ class AuthController extends Controller {
         session()->put('user-email', $request->email);
         $user = User::whereEmail($request->email)->first();
         if (Hash::check($request->password, $user->password)) {
-            $token = Str::random(5);
+            $token = rand(100000,999999);
 
             $user->fill([
                 'otp_token' => $token,
@@ -139,7 +140,7 @@ class AuthController extends Controller {
                 return back()->withErrors('An error occurred while sending the verification email.');
             }
 
-            return back()->with('message', true);
+            return redirect('/login/verify');
         }
 
         return back()->withErrors('Incorrect credentials.');
@@ -172,7 +173,7 @@ class AuthController extends Controller {
 
     public function updatePassword(){
         $this->validate(request(), [
-			'password' => ['confirmed']
+			'password' => ['required', 'confirmed', new StrengthPassword]
 		]);
 
         /** @var User */
