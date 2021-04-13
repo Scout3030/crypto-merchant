@@ -52,7 +52,7 @@
     	<p>Thanks for singning up!<br>
       Please verify your email address by clicking the button below</p>
       <br>
-      <p><a class="btn" href="{{ url('/register/verify/' . $data->confirmation_code) }}">ACTIVATE YOUR ACCOUNT</a></p>
+      <p><a class="btn" href="{{ url('/register/verify/' . $data->confirmation_code) }}" target="_blank" rel="noopener noreferrer">ACTIVATE YOUR ACCOUNT</a></p>
       <br>
       <br>
       <p>Thanks,<br>
