@@ -28,6 +28,16 @@
       border-top: 3px solid #cecece;
       color: #6d6d6d;
     }
+    a.btn {
+      background-color: #71bf7e;
+      color: #fff;
+      font-weight: 600;
+      padding: 12px 24px;
+      border-radius: 10px;
+      text-decoration: none;
+      min-width: 240px;
+      display: inline-block;
+    }
   </style>
 </head>
 <table width="400" border="0" align="center" style="text-align:center;">
@@ -35,14 +45,17 @@
     <td><img src="{{ asset('img/logo.png') }}" width="210" height="121" alt="logo" /></td>
   </tr>
   <tr class="oneTime">
-    <td>One Time Password</td>
+    <td>Welcome to Cryptomatix</td>
   </tr>
   <tr class="content">
     <td>
-    	<p>In order to make your login attempt<br>
-      successful, Please use the following OTP:</p>
+      <p style="font-size: 18px;">Following are your login credentials:</p>
+    	<p>
+        <b>Email:</b> {{ $data->email }}<br>
+        <b>Temporary Password:</b> {{ $data->password }}
+      </p>
       <br>
-      <p><b>{{ $data->password }}</b></p>
+      <p><a class="btn" href="{{ route('auth.showLoginForm') }}">Click here to Login</a></p>
       <br>
       <br>
       <p>Thanks,<br>
