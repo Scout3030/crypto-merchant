@@ -17,7 +17,6 @@ use App\Http\Controllers\UserKycApplicationsController;
 |
 */
 
-Route::get('/', [HomeController::class, 'index'])->name('index');
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('auth.showLoginForm');
 Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
 Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
@@ -31,15 +30,24 @@ Route::post('/forgot-password', [AuthController::class, 'sendPasswordResetEmail'
 Route::get('/reset-password', [AuthController::class, 'showPasswordResetForm'])->name('auth.showPasswordResetForm');
 Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('auth.resetPassword');
 
-Route::group(['middleware' => ['auth']], function () {
+
+Route::middleware('auth')->group(function () {
+
+    // Dashboard
+    Route::get('/', [HomeController::class, 'index'])->name('index');
+
     Route::view('/change/password', 'auth.change-password')->name('auth.change.password');
     Route::put('/change/password', [AuthController::class, 'updatePassword'])->name('auth.update.password');
-});
 
-Route::name('merchant.')->prefix('merchant')->middleware('auth')->group(function () {
-    Route::get('/', [MerchantController::class, 'index'])->name('index');
-});
-Route::name('kyc.')->prefix('kyc')->middleware('auth')->group(function () {
-    Route::get('/create', [UserKycApplicationsController::class, 'create'])->name('kyc.create');
-    Route::post('/', [UserKycApplicationsController::class, 'store'])->name('kyc.store');
+    // Merchant
+    Route::name('merchant.')->prefix('merchant')->group(function () {
+        Route::get('/', [MerchantController::class, 'index'])->name('index');
+    });
+
+    // KYC
+    Route::name('kyc.')->prefix('kyc')->group(function () {
+        Route::get('/create', [UserKycApplicationsController::class, 'create'])->name('create');
+        Route::post('/', [UserKycApplicationsController::class, 'store'])->name('store');
+    });
+
 });
