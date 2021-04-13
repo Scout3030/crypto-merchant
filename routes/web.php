@@ -23,8 +23,16 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('auth.showRegistrationForm');
 Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
 Route::get('/register/verify/{code}', [AuthController::class, 'verify']);
-Route::view('/login/verify', 'auth.login_otp_token')->middleware('otp.token');
-Route::post('/login/verify', [AuthController::class, 'verifyLoginToken'])->middleware('otp.token')->name('auth.login.verify');
+
+
+Route::group(['middleware' => 'otp.token'], function() {
+    Route::view('/login/verify', 'auth.login_otp_token');
+    Route::post('/login/verify', [AuthController::class, 'verifyLoginToken'])
+        ->name('auth.login.verify');
+    Route::post('/send/otp/code', [AuthController::class, 'sendOTPCode'])
+        ->name('auth.send.otp.code');
+});
+
 Route::get('/forgot-password', [AuthController::class, 'showForgotPasswordForm'])->name('auth.showForgotPasswordForm');
 Route::post('/forgot-password', [AuthController::class, 'sendPasswordResetEmail'])->name('auth.sendPasswordResetEmail');
 Route::get('/reset-password', [AuthController::class, 'showPasswordResetForm'])->name('auth.showPasswordResetForm');

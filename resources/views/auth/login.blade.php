@@ -25,11 +25,11 @@
 
         <div class="mb-3">
             <label class="form-label">Email</label>
-            <input type="email" name="email" class="form-control" placeholder="Enter Your Email">
+            <input type="email" name="email" class="form-control" placeholder="Enter Your Email" required>
         </div>
         <div class="mb-3">
             <label class="form-label">Password</label>
-            <input type="password" name="password" class="form-control" placeholder="Enter Your Password">
+            <input type="password" name="password" class="form-control" placeholder="Enter Your Password" required>
         </div>
         <div class="mb-3 form-check">
             <input type="checkbox" name="remember" class="form-check-input">

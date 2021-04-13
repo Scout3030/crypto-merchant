@@ -123,6 +123,7 @@ class AuthController extends Controller {
         $this->validateLogin($request);
         session()->put('user-email', $request->email);
         $user = User::whereEmail($request->email)->first();
+        if(!$user) return back()->withErrors('Incorrect credentials.');
         if (Hash::check($request->password, $user->password)) {
             $token = Str::random(5);
 
@@ -192,5 +193,27 @@ class AuthController extends Controller {
     public function broker()
     {
         return Password::broker();
+    }
+
+    public function sendOTPCode(){
+        $email = session()->get('user-email');
+        $token = rand(100000,999999);
+        $user = User::whereEmail($email)->first();
+        $user->fill([
+            'otp_token' => $token,
+            'token_status' => (string) User::ACTIVED_TOKEN
+        ])->save();
+        
+        try {
+            \Mail::to($user->email)->send(new SendOTPToken($token));
+        } catch (\Throwable $th) {
+            return back()->withErrors('An error occurred while sending the verification email.');
+        }
+
+        return back()->with(['message' => [
+                'class' => 'success', 
+                'message' => ["Success", "We've send a new OTP code to your email inbox"]
+            ]
+        ]);
     }
 }
