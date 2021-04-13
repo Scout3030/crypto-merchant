@@ -3,33 +3,25 @@
 namespace App\Http\Controllers;
 
 use stdClass;
-use App\Models\User;
-use App\Mail\SendOTPToken;
-use Illuminate\Support\Str;
-use App\Mail\NewAccountMail;
 use Illuminate\Http\Request;
-use App\Traits\RegistersUsers;
-use Illuminate\Validation\Rule;
-
-use App\Mail\AccountActivatedMail;
-use App\Traits\AuthenticatesUsers;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
+use App\Http\Controllers\Controller;
+use App\Mail\AccountActivatedMail;
+use App\Mail\NewAccountMail;
+use App\Mail\SendOTPToken;
+use App\Models\User;
+use App\Traits\AuthenticatesUsers;
+use App\Traits\RegistersUsers;
+use App\Traits\ResetsPasswords;
+use App\Traits\SendsPasswordResetEmails;
 
 class AuthController extends Controller {
-    use AuthenticatesUsers, RegistersUsers;
-
-    //protected $redirectTo = '/merchant';
-
-    public function __construct()
-    {
-        // $this->middleware('guest')->except('logout'); // Login
-        // $this->middleware('guest'); // Registration
-    }
+    use AuthenticatesUsers, RegistersUsers, SendsPasswordResetEmails, ResetsPasswords;
 
     /**
      * Create a new user instance after a valid registration.
@@ -183,9 +175,22 @@ class AuthController extends Controller {
 			'password' => ['confirmed']
 		]);
 
+        /** @var User */
 		$user = auth()->user();
-		$user->password = bcrypt(request('password'));
+
+        $user->password = bcrypt(request('password'));
 		$user->save();
+
         return redirect('/merchant'); 
+    }
+
+    /**
+     * Get the broker to be used during password reset.
+     *
+     * @return \Illuminate\Contracts\Auth\PasswordBroker
+     */
+    public function broker()
+    {
+        return Password::broker();
     }
 }
