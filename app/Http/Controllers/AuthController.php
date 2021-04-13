@@ -148,11 +148,6 @@ class AuthController extends Controller {
         return back()->withErrors('Incorrect credentials.');
     }
 
-    public function verifyLogin()
-    {
-        return view('auth.login_otp_token');
-    }
-
     public function verifyLoginToken(Request $request)
     {
         $otp_token = $request->otp_token;
@@ -171,5 +166,16 @@ class AuthController extends Controller {
             return redirect('/merchant');
         }
         return back()->withErrors('An error occurred while sending the verification email.');
+    }
+
+    public function updatePassword(){
+        $this->validate(request(), [
+			'password' => ['confirmed']
+		]);
+
+		$user = auth()->user();
+		$user->password = bcrypt(request('password'));
+		$user->save();
+        return redirect('/merchant'); 
     }
 }

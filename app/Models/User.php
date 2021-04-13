@@ -14,6 +14,9 @@ class User extends Authenticatable
     const ACTIVED_TOKEN = 1;
     const INACTIVED_TOKEN = 2;
 
+    const NO = 0;
+    const YES = 1;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -26,7 +29,8 @@ class User extends Authenticatable
         'password',
         'confirmation_code',
         'otp_token',
-        'token_status'
+        'token_status',
+        'first_login'
     ];
 
     /**
