@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MerchantController;
+use App\Http\Controllers\UserKycApplicationsController;
 //use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 
@@ -35,5 +36,9 @@ Route::group(['middleware' => ['auth']], function () {
 
 Route::name('merchant.')->prefix('merchant')->middleware('auth')->group(function () {
     Route::get('/', [MerchantController::class, 'index'])->name('index');
+});
+Route::name('kyc.')->prefix('kyc')->middleware('auth')->group(function () {
+    Route::get('/create', [UserKycApplicationsController::class, 'create'])->name('kyc.create');
+    Route::post('/', [UserKycApplicationsController::class, 'store'])->name('kyc.store');
 });
 //Route::get('/test-mail', [UserController::class, 'testmail']);
