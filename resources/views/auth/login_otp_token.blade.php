@@ -29,5 +29,18 @@
             <input type="text" name="otp_token" class="form-control" placeholder="Enter the OTP" required>
         </div>
         <button type="submit" class="btn btn-primary">Verify</button>
+        <div class="form-text">Did not recieve the OTP code? 
+            <a class="send-otp-button" href="#"
+                onclick="event.preventDefault();
+                console.log('here')
+                document.getElementById('send').submit();"
+            >
+                Send it again
+            </a>
+        </div>
+    </form>
+    <form id="send" action="{{ route('auth.send.otp.code') }}" method="POST" style="display: none;">
+        @csrf
+        <input type="hidden" value="{{ Session::get('otp-email') }}">
     </form>
 </x-layouts.auth>

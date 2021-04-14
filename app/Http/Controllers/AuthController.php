@@ -15,6 +15,7 @@ use App\Mail\AccountActivatedMail;
 use App\Mail\NewAccountMail;
 use App\Mail\SendOTPToken;
 use App\Models\User;
+use App\Rules\StrengthPassword;
 use App\Traits\AuthenticatesUsers;
 use App\Traits\RegistersUsers;
 use App\Traits\ResetsPasswords;
@@ -71,13 +72,15 @@ class AuthController extends Controller {
     {
         $user = User::where('confirmation_code', $code)->first();
 
-        if (!$user) return redirect('/');
+        if (!$user) {
+          return redirect('/');
+        }
 
-        $password = Str::random(5);
-
+        $password = Str::random(8);
         $user->confirmation_code = null;
         $user->email_verified_at = now();
         $user->password = Hash::make($password);
+
         $user->save();
 
         // Send email from activated account
@@ -87,7 +90,6 @@ class AuthController extends Controller {
 
         try {
             Mail::to($user->email)->send(new AccountActivatedMail($obj));
-
         } catch (\Throwable $e) {
             report($e);
 
@@ -123,8 +125,9 @@ class AuthController extends Controller {
         $this->validateLogin($request);
         session()->put('user-email', $request->email);
         $user = User::whereEmail($request->email)->first();
+        if(!$user) return back()->withErrors('Incorrect credentials.');
         if (Hash::check($request->password, $user->password)) {
-            $token = Str::random(5);
+            $token = rand(100000,999999);
 
             $user->fill([
                 'otp_token' => $token,
@@ -139,7 +142,7 @@ class AuthController extends Controller {
                 return back()->withErrors('An error occurred while sending the verification email.');
             }
 
-            return back()->with('message', true);
+            return redirect('/login/verify');
         }
 
         return back()->withErrors('Incorrect credentials.');
@@ -147,32 +150,35 @@ class AuthController extends Controller {
 
     public function verifyLoginToken(Request $request)
     {
-        $otp_token = $request->otp_token;
-        $email = session()->get('user-email');
-        $user = User::whereEmail($email)->first();
-        if($user->otp_token == $otp_token && $user->token_status == (string) User::ACTIVED_TOKEN){
+      $otp_token = $request->otp_token;
+      $email = session()->get('user-email');
+      $user = User::whereEmail($email)->first();
 
-            $user->fill([
-                'otp_token' => null,
-                'token_status' => (string) User::INACTIVED_TOKEN
-            ])->save();
+      if ($user->otp_token == $otp_token && $user->token_status == (string) User::ACTIVED_TOKEN) {
+        $user->fill([
+          'otp_token' => null,
+          'token_status' => (string) User::INACTIVED_TOKEN,
+        ])->save();
+        Auth::loginUsingId($user->id);
+        session()->forget('user-email');
 
+        if ($user->first_login == (string) User::YES) {
+          $user->first_login = (string) User::NO;
 
-            Auth::loginUsingId($user->id);
-            session()->forget('user-email');
-            
-            if($user->first_login == (string) User::YES){
-                return redirect()->route('auth.change.password');
-            }
+          $user->save();
 
-            return redirect('/merchant');
+          return redirect()->route('auth.change.password');
         }
-        return back()->withErrors('An error occurred while sending the verification email.');
+
+        return redirect('/');
+      }
+
+      return back()->withErrors('An error occurred while sending the verification email.');
     }
 
     public function updatePassword(){
         $this->validate(request(), [
-			'password' => ['confirmed']
+			'password' => ['required', 'confirmed', new StrengthPassword]
 		]);
 
         /** @var User */
@@ -181,7 +187,7 @@ class AuthController extends Controller {
         $user->password = bcrypt(request('password'));
 		$user->save();
 
-        return redirect('/merchant'); 
+        return redirect('/'); 
     }
 
     /**
@@ -192,5 +198,27 @@ class AuthController extends Controller {
     public function broker()
     {
         return Password::broker();
+    }
+
+    public function sendOTPCode(){
+        $email = session()->get('user-email');
+        $token = rand(100000,999999);
+        $user = User::whereEmail($email)->first();
+        $user->fill([
+            'otp_token' => $token,
+            'token_status' => (string) User::ACTIVED_TOKEN
+        ])->save();
+        
+        try {
+            \Mail::to($user->email)->send(new SendOTPToken($token));
+        } catch (\Throwable $th) {
+            return back()->withErrors('An error occurred while sending the verification email.');
+        }
+
+        return back()->with(['message' => [
+                'class' => 'success', 
+                'message' => ["Success", "We've send a new OTP code to your email inbox"]
+            ]
+        ]);
     }
 }

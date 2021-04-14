@@ -19,7 +19,11 @@ class CreateUserKycApplicationsTable extends Migration
             $table->string('full_name');
             $table->date('date_of_birth');
             $table->text('address');
-            $table->unsignedBigInteger('city_id');
+            $table->string('country', 5);
+            $table->string('state', 5)->nullable();
+            $table->string('state_other')->nullable();
+            $table->integer('city')->nullable();
+            $table->string('city_other')->nullable();
             $table->string('phone_number');
             $table->string('skype_id');
             $table->unsignedInteger('identification_document');

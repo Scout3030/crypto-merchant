@@ -64,7 +64,6 @@
       <p><b>{{ $otp_token }}</b></p>
       <br>
       <br>
-      <a class="btn btn-info" href="{{ url('/login/verify') }}" target="_blank" rel="noopener noreferrer">SIGN IN</a>
       <p>Thanks,<br>
       The Cryptomatix Team</p>
     </td>
