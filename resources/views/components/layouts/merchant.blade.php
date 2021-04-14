@@ -18,7 +18,7 @@
 <body class="h-100 dashboard">
 	<div id="sidebar">
 		<div class="logo">
-			<a href="#"><img src="{{ asset('img/logo.png') }}" alt=""></a>
+			<a href="/"><img src="{{ asset('img/logo.png') }}" alt=""></a>
 		</div>
 		<ul class="menu">
 			<li class="{{ (request()->is('/')) ? 'mm-active' : '' }}"><a href="{{ route('index') }}" class="has-arrow"><i class="flaticon-381-networking"></i> <span class="navText">Dashboard</span></a></li>
