@@ -6,11 +6,15 @@ use App\Models\UserKycApplication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use App\Models\Country;
+
 class UserKycApplicationsController extends Controller
 {
     public function create()
     {
-        return view('kyc.create');
+        $countries = Country::all();
+
+        return view('kyc.create', compact('countries'));
     }
 
     public function store(Request $request)
@@ -19,7 +23,6 @@ class UserKycApplicationsController extends Controller
             'full_name' => 'required',
             'date_of_birth' => 'required|date',
             'address' => 'required',
-            'city_id' => 'required',
             'phone_number' => 'required',
             'skype_id' => 'required',
             'identification_document' => 'required',
@@ -28,7 +31,9 @@ class UserKycApplicationsController extends Controller
 
 
         $input = $request->all();
-        $input['user_id'] = 1; //Auth::id();
+        $input['user_id'] = Auth::id();
+
+        
 
         UserKycApplication::create( $input );
 

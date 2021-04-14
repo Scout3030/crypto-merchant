@@ -31,7 +31,10 @@
 
                 <div class="col-md-6 mb-3">
                     <label for="form-label">Full name</label>
-                    <input type="text" name="full_name" class="form-control" placeholder="Enter Your Full Name" required>
+                    <input type="text" name="full_name" class="form-control @error('full_name') is-invalid @enderror" placeholder="Enter Your Full Name">
+                    @error('full_name')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="form-label">Date Of Birth</label>
@@ -43,21 +46,22 @@
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="form-label">Country</label>
-                    <select id="country_id" class="form-select" aria-label="Default select example" required>
-                        <option value="1">Prueba</option>
+                    <select id="country" name="country" class="form-select" aria-label="Default select example" onchange="selectCountry()" required>
+                        <option selected disabled>Open this select menu</option>
+                        @foreach ($countries as $country)
+                        <option value="{{ $country->iso2 }}">{{ $country->name }}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="form-label">State</label>
-                    <select id="state_id" class="form-control" required>
-                        <option value="1">Prueba</option>
+                    <select id="state" name="state" class="form-control" disabled required>
+                        <option selected disabled>Open this select menu</option>
                     </select>
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="form-label">City</label>
-                    <select id="city_id" name="city_id" class="form-control" required>
-                        <option value="1">Prueba</option>
-                    </select>
+                    <select id="city" name="city" class="form-control" disabled required></select>
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="form-label">Phone Number</label>
@@ -117,3 +121,60 @@
 
     </div>
 </x-layouts.merchant>
+
+
+<script type="text/javascript">
+
+    function selectCountry() {
+        let country = document.getElementById( 'country' ).value
+        console.log( country );
+
+        axios.get( '/country-state/' + country )
+        .then( function ( response ) {
+
+            let state = document.getElementById( 'state' );
+
+            state.innerHTML = '<option selected disabled>Open this select menu</option>';
+            state.removeAttribute( 'disabled' );
+            state.setAttribute( 'onchange', 'selectState()' );
+
+            let city = document.getElementById( 'city' );
+            city.innerHTML = '';
+
+            response.data.forEach( element => {
+                let option = document.createElement( 'option' );
+                option.text = element.name;
+                option.value = element.iso2
+                state.add( option );
+            });
+        })
+        .catch( function (error) {
+            console.log( error );
+        });
+    }
+
+    function selectState() {
+        let state = document.getElementById( 'state' ).value
+        console.log( state );
+
+        axios.get( '/country-state-city/' + state )
+        .then( function ( response ) {
+
+            let city = document.getElementById( 'city' );
+
+            city.innerHTML = '';
+            city.removeAttribute( 'disabled' );
+
+            response.data.forEach( element => {
+                let option = document.createElement( 'option' );
+                option.text = element.name;
+                option.value = element.id
+                city.add(option);
+            });
+        })
+        .catch( function ( error ) {
+            console.log( error );
+        });
+    }
+
+</script>

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MerchantController;
+use App\Http\Controllers\StatesController;
 use App\Http\Controllers\UserKycApplicationsController;
 
 /*
@@ -44,5 +45,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/create', [UserKycApplicationsController::class, 'create'])->name('create');
         Route::post('/', [UserKycApplicationsController::class, 'store'])->name('store');
     });
+
+    Route::get('/country-state/{code_country}', [StatesController::class, 'getStatesByCountry']);
+    Route::get('/country-state-city/{code_state}', [StatesController::class, 'getCitiesByState']);
 
 });

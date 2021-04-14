@@ -181,7 +181,7 @@ class AuthController extends Controller {
         $user->password = bcrypt(request('password'));
 		$user->save();
 
-        return redirect('/merchant'); 
+        return redirect('/'); 
     }
 
     /**
