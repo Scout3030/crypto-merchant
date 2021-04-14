@@ -72,13 +72,15 @@ class AuthController extends Controller {
     {
         $user = User::where('confirmation_code', $code)->first();
 
-        if (!$user) return redirect('/');
+        if (!$user) {
+          return redirect('/');
+        }
 
-        $password = Str::random(5);
-
+        $password = Str::random(8);
         $user->confirmation_code = null;
         $user->email_verified_at = now();
         $user->password = Hash::make($password);
+
         $user->save();
 
         // Send email from activated account
@@ -88,7 +90,6 @@ class AuthController extends Controller {
 
         try {
             Mail::to($user->email)->send(new AccountActivatedMail($obj));
-
         } catch (\Throwable $e) {
             report($e);
 
@@ -167,7 +168,7 @@ class AuthController extends Controller {
                 return redirect()->route('auth.change.password');
             }
 
-            return redirect('/merchant');
+            return redirect('/');
         }
         return back()->withErrors('An error occurred while sending the verification email.');
     }
@@ -183,7 +184,7 @@ class AuthController extends Controller {
         $user->password = bcrypt(request('password'));
 		$user->save();
 
-        return redirect('/merchant'); 
+        return redirect('/'); 
     }
 
     /**
