@@ -150,27 +150,30 @@ class AuthController extends Controller {
 
     public function verifyLoginToken(Request $request)
     {
-        $otp_token = $request->otp_token;
-        $email = session()->get('user-email');
-        $user = User::whereEmail($email)->first();
-        if($user->otp_token == $otp_token && $user->token_status == (string) User::ACTIVED_TOKEN){
+      $otp_token = $request->otp_token;
+      $email = session()->get('user-email');
+      $user = User::whereEmail($email)->first();
 
-            $user->fill([
-                'otp_token' => null,
-                'token_status' => (string) User::INACTIVED_TOKEN
-            ])->save();
+      if ($user->otp_token == $otp_token && $user->token_status == (string) User::ACTIVED_TOKEN) {
+        $user->fill([
+          'otp_token' => null,
+          'token_status' => (string) User::INACTIVED_TOKEN,
+        ])->save();
+        Auth::loginUsingId($user->id);
+        session()->forget('user-email');
 
+        if ($user->first_login == (string) User::YES) {
+          $user->first_login = (string) User::NO;
 
-            Auth::loginUsingId($user->id);
-            session()->forget('user-email');
-            
-            if($user->first_login == (string) User::YES){
-                return redirect()->route('auth.change.password');
-            }
+          $user->save();
 
-            return redirect('/');
+          return redirect()->route('auth.change.password');
         }
-        return back()->withErrors('An error occurred while sending the verification email.');
+
+        return redirect('/');
+      }
+
+      return back()->withErrors('An error occurred while sending the verification email.');
     }
 
     public function updatePassword(){
