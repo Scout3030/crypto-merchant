@@ -7,47 +7,77 @@ body {
 a {
   transition: all ease .3s; }
 
+.bglogin {
+  background-color: #dad8d8;
+  background-image: url("../img/bg.png");
+  background-size: cover;
+  background-position: center; }
+
 .contLogin {
-  background: #1EAAE7;
+  background: #fff;
   border-radius: 5px;
   padding: 50px;
-  color: #fff; }
+  color: #333; }
   .contLogin h2 {
-    font-size: 40px; }
+    color: #1EAAE7;
+    font-size: 50px;
+    text-align: center;
+    font-weight: 600;
+    margin-bottom: 25px; }
+  .contLogin p {
+    font-weight: 600; }
 
 .formLogin label {
-  margin-bottom: 5px; }
+  margin-bottom: 5px;
+  font-weight: 600; }
 .formLogin .form-control {
-  border-radius: 0;
-  padding: 15px;
-  font-weight: 300; }
+  border-radius: 10px;
+  padding: 16px 25px;
+  font-weight: 300;
+  background-color: #d5f3dd;
+  border: none; }
+  .formLogin .form-control.validation {
+    background-color: #ffd5d5;
+    color: #ff2e2e; }
 .formLogin .form-check-label {
   font-weight: 300; }
 .formLogin a.forgotPass {
   float: right;
-  color: #fff;
-  text-decoration: none; }
+  color: #333;
+  text-decoration: none;
+  font-weight: 600; }
   .formLogin a.forgotPass:hover {
     text-decoration: underline; }
 .formLogin button.btn {
   width: 100%;
   padding: 15px;
   background-color: #fff;
-  color: #1EAAE7;
-  border: none;
-  border-radius: 1.25rem; }
+  color: #71c07d;
+  border: 1px solid #71c07d;
+  border-radius: 10px; }
 .formLogin .form-text {
   margin-top: 20px;
-  color: #fff;
-  font-weight: 300; }
+  color: #333; }
   .formLogin .form-text a {
-    color: #fff;
-    font-weight: 500; }
+    color: #333;
+    font-weight: 600;
+    text-decoration: none; }
+  .formLogin .form-text.validation {
+    color: #ff2e2e;
+    margin-top: 4px;
+    font-size: 13px; }
+.formLogin .form-check-input[type=checkbox] {
+  border-radius: 15px;
+  border-color: #9ab6dd;
+  border-width: 2px; }
 
 @media (max-width: 767px) {
   .logoLogin {
     margin-top: 20px;
-    margin-bottom: 20px; } }
+    margin-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    display: table; } }
 @media (max-width: 500px) {
   .contLogin {
     padding: 30px;
@@ -90,6 +120,25 @@ a {
     padding: 5px 0;
     font-size: 25px; }
 
+h2.titleNoti {
+  color: #1EAAE7;
+  font-size: 50px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 30px; }
+
+.textNoti {
+  font-size: 20px;
+  font-weight: 600;
+  padding: 45px; }
+  .textNoti a {
+    color: #71c07d; }
+
+@media (max-width: 991px) {
+  .bglogin h2 {
+    font-size: 30px !important; }
+    .bglogin h2.titleNoti {
+      margin-top: 30px; } }
 body.dashboard {
   display: flex; }
 

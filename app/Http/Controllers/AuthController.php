@@ -139,17 +139,21 @@ class AuthController extends Controller {
             } catch (\Throwable $e) {
                 report($e);
 
-                return back()->withErrors('An error occurred while sending the verification email.');
+                return back()->withErrors(['email' => 'An error occurred while sending the verification email.']);
             }
 
             return redirect('/login/verify');
         }
 
-        return back()->withErrors('Incorrect credentials.');
+        return back()->withErrors(['email' => 'Incorrect credentials.']);
     }
 
     public function verifyLoginToken(Request $request)
     {
+      $request->validate([
+        'otp_token' => 'required'
+      ]);
+
       $otp_token = $request->otp_token;
       $email = session()->get('user-email');
       $user = User::whereEmail($email)->first();
@@ -173,7 +177,7 @@ class AuthController extends Controller {
         return redirect('/');
       }
 
-      return back()->withErrors('An error occurred while sending the verification email.');
+      return back()->withErrors(['otp_token' => 'The OTP TOKEN is invalid.']);
     }
 
     public function updatePassword(){
@@ -187,7 +191,7 @@ class AuthController extends Controller {
         $user->password = bcrypt(request('password'));
 		$user->save();
 
-        return redirect('/'); 
+        return redirect('/');
     }
 
     /**
@@ -208,16 +212,16 @@ class AuthController extends Controller {
             'otp_token' => $token,
             'token_status' => (string) User::ACTIVED_TOKEN
         ])->save();
-        
+
         try {
             \Mail::to($user->email)->send(new SendOTPToken($token));
         } catch (\Throwable $th) {
-            return back()->withErrors('An error occurred while sending the verification email.');
+            return back()->withErrors(['email' => 'An error occurred while sending the verification email.']);
         }
 
         return back()->with(['message' => [
-                'class' => 'success', 
-                'message' => ["Success", "We've send a new OTP code to your email inbox"]
+                'class' => 'success',
+                'message' => ["success", "We've send a new OTP code to your email inbox"]
             ]
         ]);
     }

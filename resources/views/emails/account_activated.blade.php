@@ -55,7 +55,7 @@
         <b>Temporary Password:</b> {{ $data->password }}
       </p>
       <br>
-      <p><a class="btn" href="{{ route('auth.showLoginForm') }}" target="_blank" rel="noopener noreferrer">Click here to Login</a></p>
+      <p><a class="btn" href="{{ route('auth.showLoginForm') }}" target="_blank">Click here to Login</a></p>
       <br>
       <br>
       <p>Thanks,<br>
