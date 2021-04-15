@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use App\Rules\StrengthPassword;
 
 trait ResetsPasswords
 {
@@ -73,11 +74,11 @@ trait ResetsPasswords
      */
     protected function rules()
     {
-        return [
-            'token' => 'required',
-            'email' => 'required|email',
-            'password' => 'required|confirmed|min:8',
-        ];
+      return [
+        'token' => 'required',
+        'email' => 'required|email',
+        'password' => ['required', 'confirmed', new StrengthPassword],
+      ];
     }
 
     /**

@@ -29,13 +29,13 @@ class StrengthPassword implements Rule
       return true;
     }
 
-    $uppercase = preg_match('@[A-Z]@', $value);
-    $lowercase = preg_match('@[a-z]@', $value);
-    $number = preg_match('/\pN/', $value);
-    $symbol = preg_match('/\p{Z}|\p{S}|\p{P}/', $value);
+    $uppercase = boolval(preg_match('@[A-Z]@', $value));
+    $lowercase = boolval(preg_match('@[a-z]@', $value));
+    $number = boolval(preg_match('/\pN/', $value));
+    $symbol = boolval(preg_match('/\p{Z}|\p{S}|\p{P}/', $value));
     $length = strlen($value) >= 8;
 
-    return $uppercase || $lowercase || $number || $symbol || $length;
+    return $uppercase && $lowercase && $number && $symbol && $length;
   }
 
   /**
