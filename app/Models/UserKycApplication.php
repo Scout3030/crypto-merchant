@@ -14,13 +14,19 @@ class UserKycApplication extends Model
         'full_name',
         'date_of_birth',
         'address',
-        'city_id',
+        'country',
+        'state',
+        'other_state',
+        'city',
+        'other_city',
         'phone_number',
         'skype_id',
         'identification_document',
+        'other_document',
         'upload_document',
         'document_number',
-        'tax_id'
+        'tax_id',
+        'step'
     ];
 
     public function user()
