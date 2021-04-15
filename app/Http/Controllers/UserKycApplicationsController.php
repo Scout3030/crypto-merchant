@@ -16,26 +16,28 @@ use Illuminate\Validation\Rule;
 
 class UserKycApplicationsController extends Controller
 {
-    public $path;
-
-    public function __construct()
-    {
-        $this->path = storage_path('app/public/documents');
-    }
-
     public function create()
     {
-        $step = (integer) UserKycApplication::where('user_id', Auth::id())->first()->step;
 
-        switch ($step) {
+        $data = UserKycApplication::where( 'user_id', Auth::id() )->first();
+
+        if ( $data == null ) {
+            $user_kyc = UserKycApplication::create([
+                'user_id' => Auth::id(),
+                'step' => 0
+            ]);
+
+            $data = $user_kyc;
+        }
+
+        /*
+        switch ($data->step) {
             case 0:
                 return view('kyc.step0');
 
                 break;
 
             case 1:
-                $countries = Country::all();
-                return view('kyc.step1', compact('countries'));
 
                 break;
             case 2:
@@ -48,11 +50,14 @@ class UserKycApplicationsController extends Controller
 
                 break;
 
-            case 4:
-                return 'step4';
+                case 4:
+                    return 'step4';
 
-                break;
+                    break;
         }
+        */
+        $countries = Country::all();
+        return view('kyc.step1', compact('countries'));
     }
 
     public function store(Request $request)
@@ -83,17 +88,16 @@ class UserKycApplicationsController extends Controller
         }
 
         $input = $request->all();
-        $input['user_id'] = Auth::id();
+        $input['step'] = 2;
 
         // Upload Image
         if ( $request->hasFile('image') ) {
             $input['upload_document'] = Storage::disk('local')->put( 'public/documents', $request->file('image') );
         }
 
-        $user_kyc = UserKycApplication::create( $input );
+        $user_kyc = UserKycApplication::where('user_id', Auth::id())->first();
+        $user_kyc->update( $input );
 
-        $user_kyc->step = 2;
-        $user_kyc->save();
 
         return back()->with('success', true);
 

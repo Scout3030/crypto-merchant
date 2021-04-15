@@ -24,7 +24,11 @@
 
                 <div class="col-md-6 mb-3">
                     <label for="form-label">Full name</label>
-                    <input type="text" name="full_name" class="form-control @error('full_name') validation @enderror" placeholder="Enter Your Full Name" value="{{ old('full_name') }}">
+                    <input type="text"
+                        name="full_name"
+                        class="form-control @error('full_name') validation @enderror"
+                        placeholder="Enter Your Full Name"
+                        value="{{ old('full_name') }}">
                     @error('full_name')
                         <div class="form-text validation pb-3">{{ $message }}</div>
                     @enderror
@@ -146,7 +150,7 @@
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="form-label">Upload Document</label>
-                    <input type="file" name="image" class="form-control @error('image') validation @enderror" accept="image/*,.pdf" value="{{ old('image') }}">
+                    <input type="file" name="image" class="form-control @error('image') validation @enderror" accept="image/*,.pdf">
                     @error('image')
                         <div class="form-text validation pb-3">{{ $message }}</div>
                     @enderror
@@ -203,7 +207,6 @@
             let city = document.getElementById( 'city' );
             city.innerHTML = '';
             city.classList.remove('d-none');
-            city.setAttribute( 'disabled', 'true' );
 
             let state_other = document.getElementById('other_state');
             state_other.classList.add('d-none');
@@ -214,7 +217,6 @@
 
             let state = document.getElementById( 'state' );
             state.innerHTML = '<option selected disabled>Open this select menu</option>';
-            state.removeAttribute( 'disabled' );
             state.setAttribute( 'onchange', 'selectState()' );
 
             response.data.forEach( element => {
@@ -267,7 +269,6 @@
             .then( function ( response ) {
 
                 city.classList.remove('d-none');
-                city.removeAttribute( 'disabled' );
                 city.setAttribute( 'onchange', 'selectCity()' );
 
                 response.data.forEach( element => {
