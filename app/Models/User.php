@@ -30,7 +30,8 @@ class User extends Authenticatable
         'confirmation_code',
         'otp_token',
         'token_status',
-        'first_login'
+        'first_login',
+        'roles'
     ];
 
     /**
