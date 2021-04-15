@@ -73,7 +73,7 @@
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="form-label">Identification Document</label>
-                    <select name="identification_document" class="form-control" required>
+                    <select id="identification_document" name="identification_document" class="form-control" required onchange="viewInputDocument()">
                         <option value="1">Passport</option>
                         <option value="2">Certificate of incorporation</option>
                         <option value="3">Share Certificates</option>
@@ -82,7 +82,9 @@
                         <option value="6">Proof of Address</option>
                         <option value="7">Bank Statements</option>
                         <option value="8">Letter from bank for good standing</option>
+                        <option value="999">Other</option>
                     </select>
+                    <input type="text" id="other_document" name="other_document" class="form-control mt-2 d-none" placeholder="Enter your Other Identification Document">
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="form-label">Upload Document</label>
@@ -175,6 +177,21 @@
         .catch( function ( error ) {
             console.log( error );
         });
+    }
+
+    function viewInputDocument() {
+        var input_document = document.getElementById('other_document');
+
+        input_document.classList.add( 'd-none' );
+        input_document.removeAttribute( 'required' );
+
+        let identification_document = document.getElementById('identification_document').value;
+
+        if (identification_document == '999') {
+
+            input_document.classList.remove( 'd-none' );
+            input_document.setAttribute( 'required', 'true' );
+        }
     }
 
 </script>
