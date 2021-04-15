@@ -25,8 +25,7 @@
 			<li><a href="#"><i class="flaticon-381-settings-2"></i> <span class="navText">Activity</span></a></li>
 		</ul>
 		<div class="footerNav">
-			<p><b>Mophy Payment Admin Dashboard</b><br>© 2021 All Rights Reserved</p>
-			<p>Made with ♥ by DexignZone</p>
+			<p><b>CryptoMatix</b><br>&copy; @php echo date('Y'); @endphp All Rights Reserved</p>
 		</div>
 	</div>
 
