@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Roles;
 use stdClass;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -39,7 +40,8 @@ class AuthController extends Controller {
         // User create
         $user = User::create([
             'email' => $request->email,
-            'confirmation_code' => md5(time() . $request->email)
+            'confirmation_code' => md5(time() . $request->email),
+            'roles' => Roles::MERCHANT
         ]);
 
         // Send verification email
