@@ -1,4 +1,4 @@
-<x-layouts.guest>
+<x-layouts.guest type="redirect">
     <h2 class="titleNoti">Account Activated Successfully</h2>
     <div class="card text-center">
         <div class="card-body textNoti">
