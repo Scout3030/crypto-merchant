@@ -51,13 +51,13 @@ class AuthController extends Controller {
 
         try {
             Mail::to($user->email)->send(new NewAccountMail($obj));
+
+            return redirect('/login')->with('success', true);
         } catch (\Throwable $e) {
             report($e);
 
             return back()->withErrors('An error occurred while sending the verification email.');
         }
-
-        return back()->with('success', true);
     }
 
     /**
