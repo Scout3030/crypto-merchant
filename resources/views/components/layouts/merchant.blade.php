@@ -16,11 +16,10 @@
 		</div>
 		<ul class="menu">
 			<li class="{{ (request()->is('/')) ? 'mm-active' : '' }}"><a href="{{ route('index') }}" class="has-arrow"><i class="flaticon-381-networking"></i> <span class="navText">Dashboard</span></a></li>
-			<li class="{{ (request()->is('kyc*')) ? 'mm-active' : '' }}"><a href="#" class="has-arrow"><i class="flaticon-381-notepad"></i> <span class="navText">KYC</span></a>
-				<ul class="subMenu">
-					<li><a href="{{ route('kyc.create') }}">Create</a></li>
-					<li><a href="#">List</a></li>
-				</ul>
+			<li class="{{ (request()->is('kyc*')) ? 'mm-active' : '' }}">
+        <a href="{{ route('kyc.create') }}">
+          <i class="flaticon-381-notepad"></i> <span class="navText">KYC</span>
+        </a>
 			</li>
 			<li><a href="#"><i class="flaticon-381-settings-2"></i> <span class="navText">Activity</span></a></li>
 		</ul>
