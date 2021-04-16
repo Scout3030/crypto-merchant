@@ -14,6 +14,10 @@
             </div>
         @endif
 
+        @if ( Session::has('message') )
+            @include('partials.notification')
+        @endif
+
         <div class="mb-3">
             <label class="form-label">One Time Password</label>
             <input type="password" name="otp_token" class="form-control @error('otp_token') validation @enderror" placeholder="Enter the OTP">

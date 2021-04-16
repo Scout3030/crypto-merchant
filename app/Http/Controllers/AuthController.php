@@ -41,7 +41,7 @@ class AuthController extends Controller {
         $user = User::create([
             'email' => $request->email,
             'confirmation_code' => md5(time() . $request->email),
-            'roles' => Roles::MERCHANT
+            'role' => Roles::MERCHANT
         ]);
 
         // Send verification email
