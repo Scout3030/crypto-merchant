@@ -16,11 +16,11 @@
                 </div>
             @endif
 
-            <form class="formLogin row" action="{{ route('kyc.store') }}" method="POST" enctype="multipart/form-data">
+            <form class="formLogin row" action="{{ route('kyc.store.step1') }}" method="POST" enctype="multipart/form-data">
 
                 @csrf
 
-                <input type="hidden" name="step" value="1">
+                <input type="hidden" name="step" value="{{ $step }}">
 
                 <div class="col-md-6 mb-3">
                     <label for="form-label">Full name</label>

@@ -492,3 +492,13 @@ main .dataTablesInfo .dataTables_paginate .paginate_button.previous, main .dataT
     display: none; }
 
 /*# sourceMappingURL=main.css.map */
+
+.formLogin .form-select {
+    border-radius: 10px;
+    padding: 16px 25px;
+    font-weight: 300;
+    background-color: #d5f3dd;
+    border: none; }
+.formLogin .form-select.validation {
+    background-color: #ffd5d5;
+    color: #ff2e2e; }

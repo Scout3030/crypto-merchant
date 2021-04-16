@@ -50,8 +50,8 @@ Route::middleware('auth')->group(function () {
 
     // KYC
     Route::name('kyc.')->prefix('kyc')->group(function () {
-        Route::get('/create', [UserKycApplicationsController::class, 'create'])->name('create');
-        Route::post('/', [UserKycApplicationsController::class, 'store'])->name('store');
+        Route::get('/create/{step?}', [UserKycApplicationsController::class, 'create'])->name('create');
+        Route::post('/store/step1', [UserKycApplicationsController::class, 'storeStep1'])->name('store.step1');
     });
 
     Route::get('/country-state/{code_country}', [StatesController::class, 'getStatesByCountry']);
