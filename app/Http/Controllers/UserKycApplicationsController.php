@@ -16,51 +16,48 @@ use Illuminate\Validation\Rule;
 
 class UserKycApplicationsController extends Controller
 {
-    public function create()
+    public function create($step = 0)
     {
-
         $data = UserKycApplication::where( 'user_id', Auth::id() )->first();
 
         if ( $data == null ) {
-            $user_kyc = UserKycApplication::create([
+            UserKycApplication::create([
                 'user_id' => Auth::id(),
                 'step' => 0
             ]);
-
-            $data = $user_kyc;
+        } else {
+            $step = $data->step;
         }
 
-        /*
-        switch ($data->step) {
-            case 0:
-                return view('kyc.step0');
-
-                break;
-
+        switch ($step) {
             case 1:
+                $data->step = 1;
+                $data->save();
+
+                $countries = Country::all();
+                return view('kyc.step1', compact('countries'));
 
                 break;
-            case 2:
-                return 'step2';
 
+            case 2:
+
+                return view('kyc.step2');
                 break;
 
             case 3:
-                return 'step3';
-
+                # code...
                 break;
 
-                case 4:
-                    return 'step4';
+            default:
 
-                    break;
+                return view('kyc.step0');
+
+                break;
         }
-        */
-        $countries = Country::all();
-        return view('kyc.step1', compact('countries'));
+
     }
 
-    public function store(Request $request)
+    public function storeStep1(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'full_name' => 'required',
@@ -99,7 +96,7 @@ class UserKycApplicationsController extends Controller
         $user_kyc->update( $input );
 
 
-        return back()->with('success', true);
+        return view('kyc.step2')->with('success', true);
 
     }
 }
