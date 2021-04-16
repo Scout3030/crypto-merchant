@@ -20,7 +20,7 @@
 		<ul class="menu">
 			<li class="{{ (request()->is('/')) ? 'mm-active' : '' }}"><a href="{{ route('index') }}" class="has-arrow"><i class="flaticon-381-networking"></i> <span class="navText">Dashboard</span></a></li>
 			<li class="{{ (request()->is('kyc*')) ? 'mm-active' : '' }}">
-        <a href="{{ route('kyc.create') }}">
+        <a href="{{ route('kyc.create', 0) }}">
           <i class="flaticon-381-notepad"></i> <span class="navText">KYC</span>
         </a>
 			</li>
