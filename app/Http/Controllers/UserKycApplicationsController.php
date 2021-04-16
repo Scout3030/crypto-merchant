@@ -21,12 +21,10 @@ class UserKycApplicationsController extends Controller
         $data = UserKycApplication::where( 'user_id', Auth::id() )->first();
 
         if ( $data == null ) {
-            UserKycApplication::create([
+            $data = UserKycApplication::create([
                 'user_id' => Auth::id(),
                 'step' => 0
             ]);
-        } else {
-            $step = $data->step;
         }
 
         switch ($step) {
