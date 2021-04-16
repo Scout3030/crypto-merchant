@@ -502,3 +502,10 @@ main .dataTablesInfo .dataTables_paginate .paginate_button.previous, main .dataT
 .formLogin .form-select.validation {
     background-color: #ffd5d5;
     color: #ff2e2e; }
+.formLogin button.btn-next {
+    min-width: 140px;
+    padding: 15px;
+    background-color: #fff;
+    color: #71c07d;
+    border: 1px solid #71c07d;
+    border-radius: 10px; }
