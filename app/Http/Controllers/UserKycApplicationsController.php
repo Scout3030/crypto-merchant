@@ -19,15 +19,14 @@ class UserKycApplicationsController extends Controller
     public function create($step = 0)
     {
         $data = UserKycApplication::where( 'user_id', Auth::id() )->first();
-        if ($step == 0 ) {
-            if ( $data == null ) {
-                UserKycApplication::create([
-                    'user_id' => Auth::id(),
-                    'step' => 0
-                ]);
-            } else {
-                $step = $data->step;
-            }
+
+        if ( $data == null ) {
+            UserKycApplication::create([
+                'user_id' => Auth::id(),
+                'step' => 0
+            ]);
+        } else {
+            $step = $data->step;
         }
 
         switch ($step) {
@@ -36,12 +35,13 @@ class UserKycApplicationsController extends Controller
                 $data->save();
 
                 $countries = Country::all();
-                return view('kyc.step1', compact('countries', 'step'));
+                return view('kyc.step1', compact('countries'));
 
                 break;
 
             case 2:
-                # code...
+
+                return view('kyc.step2');
                 break;
 
             case 3:
@@ -96,7 +96,7 @@ class UserKycApplicationsController extends Controller
         $user_kyc->update( $input );
 
 
-        return back()->with('success', true);
+        return view('kyc.step2')->with('success', true);
 
     }
 }

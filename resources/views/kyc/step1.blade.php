@@ -20,8 +20,6 @@
 
                 @csrf
 
-                <input type="hidden" name="step" value="{{ $step }}">
-
                 <div class="col-md-6 mb-3">
                     <label for="form-label">Full name</label>
                     <input type="text"
@@ -170,11 +168,11 @@
                     @enderror
                 </div>
                 <div class="col-md-12 d-flex flex-row-reverse">
-                    <button type="submit" class="btn btn-primary mt-3">Next</button>
+                    <button type="submit" class="btn-next mt-3">Next</button>
                 </div>
                 <div class="col-md-12">
                     <ul class="nav nav-wizard">
-                        <li><a class="nav-link inactive active" href="#">
+                        <li><a class="nav-link active" href="#">
                             <span>1</span>
                         </a></li>
                         <li><a class="nav-link" href="#">
@@ -183,7 +181,7 @@
                         <li><a class="nav-link" href="#">
                             <span>3</span>
                         </a></li>
-                        <li><a class="nav-link inactive" href="#">
+                        <li><a class="nav-link" href="#">
                             <span>4</span>
                         </a></li>
                     </ul>
