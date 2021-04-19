@@ -6,6 +6,7 @@ use App\Helpers\Roles;
 use App\Http\Requests\NewPasswordRequest;
 use App\Mail\NewPasswordMail;
 use PHPUnit\Exception;
+use Segment;
 use stdClass;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -237,10 +238,25 @@ class AuthController extends Controller {
         $user->password = bcrypt($request->password);
         $user->save();
 
+        Segment::track(array(
+            "userId" => $user->id,
+            "event" => "User has changed his password from admin panel"
+        ));
+
         try{
             Mail::to($user->email)->send(new NewPasswordMail());
+            Segment::track(array(
+                "userId" => $user->id,
+                "event" => "Send new password email"
+            ));
         }catch (Exception $e){
-
+            Segment::track(array(
+                "userId" => $user->id,
+                "event" => "Send new password email fails",
+                "properties" => array(
+                    "error" => $e->getMessage()
+                )
+            ));
         }
 
         return redirect('/');
