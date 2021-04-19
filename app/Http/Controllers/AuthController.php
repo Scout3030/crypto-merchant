@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Roles;
 use App\Http\Requests\NewPasswordRequest;
+use App\Mail\NewPasswordMail;
+use PHPUnit\Exception;
 use stdClass;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -232,9 +234,14 @@ class AuthController extends Controller {
     public function newPassword(NewPasswordRequest $request){
         /** @var User */
         $user = auth()->user();
-
         $user->password = bcrypt($request->password);
         $user->save();
+
+        try{
+            Mail::to($user->email)->send(new NewPasswordMail());
+        }catch (Exception $e){
+
+        }
 
         return redirect('/');
     }
