@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Roles;
+use App\Http\Requests\NewPasswordRequest;
 use stdClass;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -216,7 +217,7 @@ class AuthController extends Controller {
         ])->save();
 
         try {
-            \Mail::to($user->email)->send(new SendOTPToken($token));
+            Mail::to($user->email)->send(new SendOTPToken($token));
         } catch (\Throwable $th) {
             return back()->withErrors(['email' => 'An error occurred while sending the verification email.']);
         }
@@ -226,5 +227,15 @@ class AuthController extends Controller {
                 'message' => ["success", "We've send a new OTP code to your email inbox"]
             ]
         ]);
+    }
+
+    public function newPassword(NewPasswordRequest $request){
+        /** @var User */
+        $user = auth()->user();
+
+        $user->password = bcrypt($request->password);
+        $user->save();
+
+        return redirect('/');
     }
 }
