@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MerchantController;
 use App\Http\Controllers\StatesController;
 use App\Http\Controllers\UserKycApplicationsController;
+use App\Http\Controllers\UsersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,5 +57,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/country-state/{code_country}', [StatesController::class, 'getStatesByCountry']);
     Route::get('/country-state-city/{code_state}', [StatesController::class, 'getCitiesByState']);
+
+    Route::get('/profile/edit', [UsersController::class, 'profile'])->name('profile.edit');
+
 
 });

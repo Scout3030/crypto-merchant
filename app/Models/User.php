@@ -31,7 +31,9 @@ class User extends Authenticatable
         'otp_token',
         'token_status',
         'first_login',
-        'roles'
+        'roles',
+        'timezone',
+        'date_format'
     ];
 
     /**
