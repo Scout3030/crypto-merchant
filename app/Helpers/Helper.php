@@ -3,7 +3,7 @@
 use Carbon\Carbon;
 use Jenssegers\Agent\Agent;
 
-function getSegmentContext(): array
+function getSegmentContext($email = null): array
 {
     $agent = new Agent();
 
@@ -12,7 +12,7 @@ function getSegmentContext(): array
             "ip" => request()->ip(),
             "agent" => $agent->browser(),
             "platform" => $agent->platform(),
-            "action_by" => auth()->user()->email,
+            "action_by" => $email ?? (auth()->check() ? auth()->user()->email : 'AnonymousUser'),
             "action_date" => Carbon::now()
         ]
     ];
