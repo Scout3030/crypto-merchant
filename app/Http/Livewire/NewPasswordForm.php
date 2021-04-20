@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Mail\NewPasswordMail;
 use App\Models\User;
+use App\Rules\CurrentPassword;
 use App\Rules\StrengthPassword;
 use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
@@ -38,6 +39,10 @@ class NewPasswordForm extends Component
     {
         $this->validate();
 
+        $this->validate([
+            'current_password' => [new CurrentPassword()],
+        ]);
+
         /** @var User */
         $user = auth()->user();
         $user->password = bcrypt($this->password);
@@ -66,8 +71,8 @@ class NewPasswordForm extends Component
 
         session()->flash('success', true);
 
-        $this->current_password = null;
-        $this->password = null;
-        $this->password_confirmation = null;
+        $this->current_password = '';
+        $this->password = '';
+        $this->password_confirmation = '';
     }
 }
