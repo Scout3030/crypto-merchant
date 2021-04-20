@@ -6,7 +6,7 @@ use App\Models\City;
 use App\Models\State;
 use Illuminate\Http\Request;
 
-class StatesController extends Controller
+class StateController extends Controller
 {
     public function getStatesByCountry($country_code)
     {

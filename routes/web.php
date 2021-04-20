@@ -3,10 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\MerchantController;
-use App\Http\Controllers\StatesController;
-use App\Http\Controllers\UserKycApplicationsController;
-use App\Http\Controllers\UsersController;
+use App\Http\Controllers\StateController;
+use App\Http\Controllers\UserKycApplicationController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,17 +47,19 @@ Route::middleware('auth')->group(function () {
 
     Route::view('/change/password', 'auth.change-password')->name('auth.change.password');
     Route::put('/change/password', [AuthController::class, 'updatePassword'])->name('auth.update.password');
+    Route::view('/new/password', 'auth.new-password')->name('auth.new.password');
+    Route::put('/new/password', [AuthController::class, 'newPassword'])->name('auth.new.password');
 
     // KYC
     Route::name('kyc.')->prefix('kyc')->group(function () {
-        Route::get('/step/{step?}', [UserKycApplicationsController::class, 'create'])->name('create');
-        Route::post('/store/step1', [UserKycApplicationsController::class, 'storeStep1'])->name('store.step1');
+        Route::get('/step/{step?}', [UserKycApplicationController::class, 'create'])->name('create');
+        Route::post('/store/step1', [UserKycApplicationController::class, 'storeStep1'])->name('store.step1');
     });
 
-    Route::get('/country-state/{code_country}', [StatesController::class, 'getStatesByCountry']);
-    Route::get('/country-state-city/{code_state}', [StatesController::class, 'getCitiesByState']);
+    Route::get('/country-state/{code_country}', [StateController::class, 'getStatesByCountry']);
+    Route::get('/country-state-city/{code_state}', [StateController::class, 'getCitiesByState']);
 
-    Route::get('/profile/edit', [UsersController::class, 'profile'])->name('profile.edit');
+    Route::get('/profile/edit', [UserController::class, 'profile'])->name('profile.edit');
 
 
 });

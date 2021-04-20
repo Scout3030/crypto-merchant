@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
-class UserKycApplicationsController extends Controller
+class UserKycApplicationController extends Controller
 {
     public function create($step = 0)
     {

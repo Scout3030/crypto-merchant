@@ -36,7 +36,7 @@ class ProfileEdit extends Component
         $this->first_name = $this->user->first_name;
         $this->last_name = $this->user->last_name;
         $this->email = $this->user->email;
-        $this->timezones = $this->user->timezones;
+        $this->timezone = $this->user->timezone;
         $this->date_format = $this->user->date_format;
     }
 
@@ -77,5 +77,7 @@ class ProfileEdit extends Component
         }
 
         session()->flash('success', true);
+
+        return back();
     }
 }

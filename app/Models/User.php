@@ -33,7 +33,8 @@ class User extends Authenticatable
         'first_login',
         'roles',
         'timezone',
-        'date_format'
+        'date_format',
+        'role_id'
     ];
 
     /**

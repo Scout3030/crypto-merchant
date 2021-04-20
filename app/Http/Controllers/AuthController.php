@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Roles;
+use App\Http\Requests\NewPasswordRequest;
+use App\Mail\NewPasswordMail;
+use PHPUnit\Exception;
+use Segment;
 use stdClass;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,6 +19,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\AccountActivatedMail;
 use App\Mail\NewAccountMail;
 use App\Mail\SendOTPToken;
+use App\Models\Role;
 use App\Models\User;
 use App\Rules\StrengthPassword;
 use App\Traits\AuthenticatesUsers;
@@ -41,7 +46,8 @@ class AuthController extends Controller {
         $user = User::create([
             'email' => $request->email,
             'confirmation_code' => md5(time() . $request->email),
-            'role' => Roles::MERCHANT
+            'role' => Roles::MERCHANT,
+            'role_id' => Role::whereName(Role::ROLE_NAME_MERCHANT)->first()->id
         ]);
 
         // Send verification email
@@ -216,7 +222,7 @@ class AuthController extends Controller {
         ])->save();
 
         try {
-            \Mail::to($user->email)->send(new SendOTPToken($token));
+            Mail::to($user->email)->send(new SendOTPToken($token));
         } catch (\Throwable $th) {
             return back()->withErrors(['email' => 'An error occurred while sending the verification email.']);
         }
@@ -226,5 +232,35 @@ class AuthController extends Controller {
                 'message' => ["success", "We've send a new OTP code to your email inbox"]
             ]
         ]);
+    }
+
+    public function newPassword(NewPasswordRequest $request){
+        /** @var User */
+        $user = auth()->user();
+        $user->password = bcrypt($request->password);
+        $user->save();
+
+        Segment::track(array(
+            "userId" => $user->id,
+            "event" => "User has changed his password from admin panel"
+        ));
+
+        try{
+            Mail::to($user->email)->send(new NewPasswordMail());
+            Segment::track(array(
+                "userId" => $user->id,
+                "event" => "Send new password email"
+            ));
+        }catch (Exception $e){
+            Segment::track(array(
+                "userId" => $user->id,
+                "event" => "Send new password email fails",
+                "properties" => array(
+                    "error" => $e->getMessage()
+                )
+            ));
+        }
+
+        return redirect('/');
     }
 }
