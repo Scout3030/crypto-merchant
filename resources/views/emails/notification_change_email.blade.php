@@ -57,21 +57,7 @@
       The Cryptomatix Team</p>
     </td>
   </tr>
-  <tr class="footer">
-    <td>
-    	<p>Get in touch<br>
-      +99 999999999999<br>
-      xyz@domain.com</p>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <a href="#" target="_blank"><img alt="Facebook" height="32" src="{{ asset('img/facebook2x.png') }}" style="display: inline-block; margin: 0 5px;" title="facebook" width="32"/></a>
-      <a href="#" target="_blank"><img alt="Twitter" height="32" src="{{ asset('img/twitter2x.png') }}" style="display: inline-block; margin: 0 5px;" title="twitter" width="32"/></a>
-      <a href="#" target="_blank"><img alt="Instagram" height="32" src="{{ asset('img/instagram2x.png') }}" style="display: inline-block; margin: 0 5px;" title="instagram" width="32"/></a>
-      <a href="#" target="_blank"><img alt="LinkedIn" height="32" src="{{ asset('img/linkedin2x.png') }}" style="display: inline-block; margin: 0 5px;" title="LinkedIn" width="32"/></a>
-    </td>
-  </tr>
+    @include('emails.partials.footer')
 </table>
 
 <body>
