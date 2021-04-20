@@ -59,4 +59,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/country-state/{code_country}', [StatesController::class, 'getStatesByCountry']);
     Route::get('/country-state-city/{code_state}', [StatesController::class, 'getCitiesByState']);
 
+    Route::get('/profile/edit', function () {
+        return 'profile.edit';
+    })->name('profile.edit');
+
 });
