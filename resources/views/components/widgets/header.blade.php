@@ -32,7 +32,7 @@
         </li>
         <li class="userLi dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Welcome {{ Auth::user()->first_name ? Auth::user()->first_name : 'Merchant' }}
+                Welcome &nbsp; <livewire:get-first-name />
                 <img src="{{ asset('img/avatar.jpg') }}" alt="">
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
