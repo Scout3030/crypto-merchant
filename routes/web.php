@@ -47,6 +47,8 @@ Route::middleware('auth')->group(function () {
 
     Route::view('/change/password', 'auth.change-password')->name('auth.change.password');
     Route::put('/change/password', [AuthController::class, 'updatePassword'])->name('auth.update.password');
+    Route::view('/new/password', 'auth.new-password')->name('auth.new.password');
+    Route::put('/new/password', [AuthController::class, 'newPassword'])->name('auth.new.password');
 
     // KYC
     Route::name('kyc.')->prefix('kyc')->group(function () {
