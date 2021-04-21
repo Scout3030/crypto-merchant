@@ -2,11 +2,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700;900&display=swap');
 
 // VARIABLES
-$color: #1EAAE7;
-$colorB: #d5f3dd;
-$colorC: #71c07d;
+@import 'variables';
 
-// GENERAL 
+// GENERAL
 body {
 	font-family: 'Poppins', sans-serif;
 	background-color: #F9F9F9;
@@ -121,7 +119,7 @@ a {
 	}
 }
 
-// ALERTS 
+// ALERTS
 .alert {
     border-radius: 20px;
 }
@@ -146,7 +144,7 @@ a {
     border-color: #461EE7;
 }
 
-// LOGIN MESSAGE 
+// LOGIN MESSAGE
 .logoMessage {
 	margin: 20px 0 40px;
 }
@@ -414,7 +412,7 @@ main {
 			color: #7e7e7e;
 			font-weight: 300;
 		}
-		.form-control, 
+		.form-control,
 		.form-select {
 		    border-radius: 0;
 		    padding: 15px;
@@ -491,3 +489,4 @@ main {
 		}
 	}
 }
+
