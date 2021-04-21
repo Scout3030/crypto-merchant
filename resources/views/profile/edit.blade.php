@@ -7,14 +7,10 @@
 
     <div class="content card">
         <div class="card-body">
-
             <livewire:profile-edit />
-
         </div>
-
     </div>
 </x-layouts.merchant>
-
 
 <script type="text/javascript">
 
