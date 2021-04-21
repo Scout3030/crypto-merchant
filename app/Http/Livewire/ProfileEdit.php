@@ -62,6 +62,8 @@ class ProfileEdit extends Component
             'date_format' => $this->date_format,
         ]);
 
+        $this->emit('setFirstName', $this->first_name);
+
         Session::put('user_timezone', $this->timezone);
         Session::put('user_date_format', $this->date_format);
 
