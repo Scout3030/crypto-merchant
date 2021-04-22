@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\StateController;
+use App\Http\Controllers\TimezoneController;
 use App\Http\Controllers\UserKycApplicationController;
 use App\Http\Controllers\UserController;
 
@@ -60,6 +61,5 @@ Route::middleware('auth')->group(function () {
     Route::get('/country-state-city/{code_state}', [StateController::class, 'getCitiesByState']);
 
     Route::get('/profile/edit', [UserController::class, 'profile'])->name('profile.edit');
-
 
 });

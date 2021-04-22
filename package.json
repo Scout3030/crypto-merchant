@@ -18,6 +18,8 @@
         "sass-loader": "^11.0.1"
     },
     "dependencies": {
-        "sass": "^1.32.11"
+        "jquery": "^3.6.0",
+        "sass": "^1.32.11",
+        "select2": "^4.1.0-rc.0"
     }
 }
