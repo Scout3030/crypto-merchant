@@ -62,4 +62,12 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/profile/edit', [UserController::class, 'profile'])->name('profile.edit');
 
+
+    Route::group([
+        'prefix' => 'notifications',
+        'as' => 'notifications.',
+    ], function () {
+        Route::view('/', 'notifications.index')->name('index');
+    });
+
 });
