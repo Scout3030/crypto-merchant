@@ -24,9 +24,11 @@ class NotificationsTable extends Component
     public function render()
     {
         $newNotifications = Notification::whereDay('created_at', now()->format('d'))
+            ->whereUserId(auth()->id())
             ->orderByDesc('created_at')
             ->get();
         $earlierNotifications = Notification::where('created_at', '<', now()->format('Y-m-d'))
+            ->whereUserId(auth()->id())
             ->orderByDesc('created_at')
             ->get();
         return view('livewire.notifications-table', [
