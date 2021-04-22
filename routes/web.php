@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\StateController;
+use App\Http\Controllers\TimezoneController;
 use App\Http\Controllers\UserKycApplicationController;
 use App\Http\Controllers\UserController;
 
@@ -67,4 +68,5 @@ Route::middleware('auth')->group(function () {
     ], function () {
         Route::view('/', 'notifications.index')->name('index');
     });
+
 });
