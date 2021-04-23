@@ -76,6 +76,14 @@ a {
   border: 1px solid #71c07d;
   border-radius: 10px;
 }
+.formLogin button.btn-outline-primary {
+  max-width: 240px;
+  padding: 15px;
+  background-color: #fff;
+  color: #1EAAE7;
+  border: 1px solid #1EAAE7;
+  border-radius: 10px 10px 0px 0px;
+}
 .formLogin .form-text {
   margin-top: 20px;
   color: #333;
