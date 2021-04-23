@@ -16,7 +16,7 @@ use Illuminate\Validation\Rule;
 
 class UserKycApplicationController extends Controller
 {
-    public function create($step = 0)
+    public function step0()
     {
         $data = UserKycApplication::where( 'user_id', Auth::id() )->first();
 
@@ -27,31 +27,16 @@ class UserKycApplicationController extends Controller
             ]);
         }
 
-        switch ($step) {
-            case 1:
-                $data->step = 1;
-                $data->save();
+        return view('kyc.step0');
+    }
 
-                $countries = Country::all();
-                return view('kyc.step1', compact('countries'));
+    public function step1()
+    {
+        $data = UserKycApplication::where( 'user_id', Auth::id() )->first();
+        $data->step = 1;
+        $data->save();
 
-                break;
-
-            case 2:
-
-                return view('kyc.step2');
-                break;
-
-            case 3:
-                # code...
-                break;
-
-            default:
-
-                return view('kyc.step0');
-
-                break;
-        }
+        return view('kyc.step1');
 
     }
 

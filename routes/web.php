@@ -53,7 +53,11 @@ Route::middleware('auth')->group(function () {
 
     // KYC
     Route::name('kyc.')->prefix('kyc')->group(function () {
-        Route::get('/step/{step?}', [UserKycApplicationController::class, 'create'])->name('create');
+        Route::get('/step/initial', [UserKycApplicationController::class, 'step0'])->name('step0');
+        Route::get('/step/1', [UserKycApplicationController::class, 'step1'])->name('step1');
+        Route::get('/step/2', [UserKycApplicationController::class, 'step2'])->name('step2');
+        Route::get('/step/3', [UserKycApplicationController::class, 'step3'])->name('step3');
+        Route::get('/step/4', [UserKycApplicationController::class, 'step4'])->name('step4');
         Route::post('/store/step1', [UserKycApplicationController::class, 'storeStep1'])->name('store.step1');
     });
 
