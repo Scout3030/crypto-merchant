@@ -51,9 +51,12 @@
     </div>
 
     <div wire:ignore class="col-md-6 mb-3">
-        <label for="form-label">Timezone</label>
-        <select id="timezone" wire:model="timezone" class="form-select @error('timezone') validation @enderror">
-            <option selected disabled>Select Option</option>
+        <label for="timezone">Timezone</label>
+        <select id="timezone"
+            wire:model="timezone"
+            class="form-control @error('timezone') validation @enderror"
+            >
+            <option value=""></option>
             @foreach ($timezones as $item)
                 <option value="{{ $item }}">{{ $item }}</option>
             @endforeach
@@ -63,10 +66,13 @@
         @enderror
     </div>
 
-    <div class="col-md-6 mb-3">
-        <label for="form-label">Date Format</label>
-        <select wire:model="date_format" class="form-select @error('date_format') validation @enderror">
-            <option selected disabled>Open this select menu</option>
+    <div wire:ignore class="col-md-6 mb-3">
+        <label for="date_format">Date Format</label>
+        <select id="date_format"
+            wire:model="date_format"
+            class="form-control @error('date_format') validation @enderror"
+            >
+            <option value=""></option>
             @foreach ($dates as $item)
                 <option value="{{ $item['id'] }}">{{ $item['text'] }}</option>
             @endforeach
@@ -77,7 +83,7 @@
     </div>
 
     <div class="col-md-12 d-flex flex-row-reverse">
-        <button type="submit" class="btn-next mt-3">Submit</button>
+        <button type="submit" class="btn-outline-primary mt-3">Submit</button>
     </div>
 
 </form>

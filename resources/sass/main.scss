@@ -87,6 +87,14 @@ a {
 	    border: 1px solid $colorC;
 	    border-radius: 10px;
 	}
+    button.btn-outline-primary {
+        max-width: 240px;
+	    padding: 15px;
+	    background-color: #fff;
+	    color: $color;
+	    border: 1px solid $color;
+	    border-radius: 10px 10px 0px 0px;
+    }
 	.form-text {
 	    margin-top: 20px;
 	    color: #333;
