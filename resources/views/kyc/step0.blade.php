@@ -11,7 +11,7 @@
 
             <p><small>Please click on the below button for the Application Process</small></p>
 
-            <a class="btn btn-primary" href="{{ route('kyc.create', 1) }}">Start Application</a>
+            <a class="btn btn-primary" href="{{ route('kyc.step1') }}">Start Application</a>
         </div>
     </div>
 </x-layouts.merchant>
