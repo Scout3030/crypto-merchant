@@ -37,7 +37,11 @@ class UserKycApplicationController extends Controller
         $data->save();
 
         return view('kyc.step1');
+    }
 
+    public function step2()
+    {
+        return view('kyc.step2');
     }
 
     public function storeStep1(Request $request)

@@ -61,8 +61,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/store/step1', [UserKycApplicationController::class, 'storeStep1'])->name('store.step1');
     });
 
-    Route::get('/country-state/{code_country}', [StateController::class, 'getStatesByCountry']);
-    Route::get('/country-state-city/{code_state}', [StateController::class, 'getCitiesByState']);
+    Route::get('/country-state', [StateController::class, 'getStatesByCountry'])->name('country.state');
+    Route::get('/country-state-city', [StateController::class, 'getCitiesByState'])->name('country.state.city');
 
     Route::get('/profile/edit', [UserController::class, 'profile'])->name('profile.edit');
 

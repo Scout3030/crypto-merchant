@@ -757,3 +757,14 @@ main .verifyCont h5 {
   min-width: initial !important;
   padding: 10px 15px;
 }
+
+.loading {
+  display: none;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 999;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
