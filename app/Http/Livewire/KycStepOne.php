@@ -13,8 +13,7 @@ class KycStepOne extends Component
     public $kyc;
     public $countries, $states, $cities;
     public $full_name, $date_of_birth, $address, $country, $state, $state_other,
-        $city, $city_other, $phone_code, $phone_number, $skype_id, $tax_id, $document_number,
-        $identification_document;
+        $city, $city_other, $phone_code, $phone_number, $skype_id, $tax_id;
 
 
     protected $listeners = [
@@ -83,7 +82,7 @@ class KycStepOne extends Component
         return view('livewire.kyc-step-one');
     }
 
-    public function store()
+    public function store( $status )
     {
         $this->validate();
 
@@ -100,6 +99,7 @@ class KycStepOne extends Component
             'skype_id' => $this->skype_id,
             'tax_id' => $this->tax_id,
             'step' => 2,
+            'status' => $status == 'next' ? true : false
         ]);
 
         session()->flash('success', true);

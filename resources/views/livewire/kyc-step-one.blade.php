@@ -1,15 +1,5 @@
 <div>
-    <form class="formLogin row" wire:submit.prevent="store" enctype="multipart/form-data">
-
-        @csrf
-        @if ( Session::has('success') )
-            <div class="alert alert-success" role="alert">
-                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
-                    <polyline points="9 11 12 14 22 4"></polyline>
-                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
-                </svg> <strong>Success!</strong> Registration created successfully!
-            </div>
-        @endif
+    <form class="formLogin row">
 
         <div class="card shadow mb-5">
             <div class="card-body">
@@ -96,7 +86,7 @@
                             <div class="form-text validation pb-3">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-md-6 mb-3">
+                    <div wire:ignore class="col-md-6 mb-3">
                         <label for="form-label">Phone Number <span class="text-danger">*</span></label>
                         <select id="phone_code" class="form-control @error('phone_number') validation @enderror">
                             @foreach ($countries as $country)
@@ -135,7 +125,6 @@
                         @enderror
                     </div>
                 </div>
-
             </div>
         </div>
 
@@ -149,7 +138,10 @@
                 <div class="row mb-4">
                     <div wire:ignore class="col-md-4 mb-3">
                         <label for="form-label">Identification Document  <span class="text-danger">*</span></label>
-                        <select id="identification_document" wire:model="identification_document" class="form-select @error('identification_document') validation @enderror" onchange="viewInputDocument()">
+                        <select id="identification_document"
+                            name="identification_document"
+                            class="form-select @error('identification_document') validation @enderror">
+                            <option value="" selected disabled>Enter Identification Document</option>
                             <option value="1">Passport</option>
                             <option value="2">Certificate of incorporation</option>
                             <option value="3">Share Certificates</option>
@@ -166,7 +158,7 @@
 
                         <input type="text"
                             id="other_document"
-                            wire:model="other_document"
+                            name="other_document"
                             class="form-control mt-2 d-none @error('other_document') validation @enderror"
                             placeholder="Enter your Other Identification Document"
                             >
@@ -177,7 +169,8 @@
                     <div class="col-md-4 mb-3">
                         <label for="form-label">Document Number <span class="text-danger">*</span></label>
                         <input type="text"
-                            wire:model="document_number"
+                            id="document_number"
+                            name="document_number"
                             class="form-control @error('document_number') validation @enderror"
                             placeholder="Enter Document Number"
                             >
@@ -185,12 +178,14 @@
                             <div class="form-text validation pb-3">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div id="actions" class="col-md-4 mb-3">
+                    <div class="col-md-4 mb-3">
                         <div id="actions">
-                            <span class="btn btn-success fileinput-button">
+                            <span class="btn btn-success fileinput-button disabled">
                                 <i class="flaticon-381-networking"></i>
                                 <span>UPLOAD</span>
                             </span>
+
+                            <button class="start d-none">Start</button>
                         </div>
                     </div>
                 </div>
@@ -198,49 +193,48 @@
                 <div class="row mb-4">
                     <div class="col-12">
 
-                        <form action="index.php" method="post" enctype="multipart/form-data">
-                            <div class="fallback">
-                                <input name="file" type="file" multiple />
-                            </div>
+                        <div class="fallback">
+                            <input name="file" type="file" multiple />
+                        </div>
 
-                            <div class="table table-striped files" id="previews">
-                                <div id="template" class="file-row row">
-                                    <!-- This is used as the file preview template -->
-                                    <div class="col-xs-12 col-lg-3">
-                                        <span class="preview" style="width:160px;height:160px;">
-                                            <img data-dz-thumbnail />
-                                        </span>
-                                        <br/>
-                                        <button class="btn btn-primary start" style="display:none;">
-                                            <i class="glyphicon glyphicon-upload"></i>
-                                            <span>Empezar</span>
-                                        </button>
-                                        <button data-dz-remove class="btn btn-warning cancel">
-                                            <i class="icon-ban-circle fa fa-ban-circle"></i>
-                                            <span>Cancelar</span>
-                                        </button>
-                                        <button data-dz-remove class="btn btn-danger delete">
-                                            <i class="icon-trash fa fa-trash"></i>
-                                            <span>Eliminar</span>
-                                        </button>
+                        <div class="table table-striped files" id="previews">
+                            <div id="template" class="file-row row">
+                                <!-- This is used as the file preview template -->
+                                <div class="col-xs-12 col-lg-3">
+                                    <span class="preview" style="width:160px;height:160px;">
+                                        <img data-dz-thumbnail />
+                                    </span>
+                                    <br/>
+                                    <button class="btn btn-primary start" style="display:none;">
+                                        <i class="glyphicon glyphicon-upload"></i>
+                                        <span>Empezar</span>
+                                    </button>
+                                    <button data-dz-remove class="btn btn-warning cancel">
+                                        <i class="icon-ban-circle fa fa-ban-circle"></i>
+                                        <span>Cancelar</span>
+                                    </button>
+                                    <button data-dz-remove class="btn btn-danger delete">
+                                        <i class="icon-trash fa fa-trash"></i>
+                                        <span>Eliminar</span>
+                                    </button>
+                                </div>
+                                <div class="col-xs-12 col-lg-9">
+                                    <p class="name" data-dz-name></p>
+                                    <p class="size" data-dz-size></p>
+                                    <div>
+                                        <strong class="error text-danger" data-dz-errormessage></strong>
                                     </div>
-                                    <div class="col-xs-12 col-lg-9">
-                                        <p class="name" data-dz-name></p>
-                                        <p class="size" data-dz-size></p>
-                                        <div>
-                                            <strong class="error text-danger" data-dz-errormessage></strong>
-                                        </div>
-                                        <div>
-                                            <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-                                              <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
-                                            </div>
+                                    <div>
+                                        <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                                            <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="dropzone-here">Drop files here to upload.</div>
-                        </form>
+                        {{-- <div class="dropzone-here">Drop files here to upload.</div> --}}
+
 
                     </div>
                 </div>
@@ -255,8 +249,8 @@
                         <p>All fields marked with <span class="text-danger">*</span> are mandatory</p>
                     </div>
                     <div class="col-md-6 d-flex flex-row-reverse">
-                        <button type="submit" class="btn-next mt-3">Save as Draft</button>
-                        <button type="submit" class="btn-next mt-3">Next</button>
+                        <button wire:click.prevent="store('draft')" class="btn-next mt-3">Save as Draft</button>
+                        <button wire:click.prevent="store('next')" class="btn-next mt-3">Next</button>
                     </div>
 
                     <div class="col-md-12">

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\File;
 
 use App\Models\Country;
 use App\Models\State;
+use App\Models\UserKycApplicationDocument;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -23,7 +24,8 @@ class UserKycApplicationController extends Controller
         if ( $data == null ) {
             $data = UserKycApplication::create([
                 'user_id' => Auth::id(),
-                'step' => 0
+                'step' => 0,
+                'status' => true
             ]);
         }
 
@@ -84,6 +86,30 @@ class UserKycApplicationController extends Controller
 
 
         return view('kyc.step2')->with('success', true);
+
+    }
+
+    public function upload(Request $request)
+    {
+        $input = $request->all();
+
+        if ( $request->hasFile('file') ) {
+            $input['image'] = Storage::disk('local')->put( 'public/documents/', $request->file('file') );
+            $input['user_id'] = Auth::id();
+            $input['status'] = true;
+
+            UserKycApplicationDocument::create($input);
+
+            return response()->json([
+                'status' => true,
+                'msg' => 'Upload corrected!'
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'msg' => 'Upload failed!'
+            ]);
+        }
 
     }
 }

@@ -15,6 +15,32 @@
 
         $('#phone_code').select2({
             theme: 'flat'
+        }).on('select2:select', function (e) {
+
+            var data = e.params.data;
+
+            if(data.id.length > 0) {
+                Livewire.emit('setCodePhone', data.id);
+            }
+        });
+
+        $('#identification_document').select2({
+            theme: 'flat'
+        }).on('select2:select' , function (e) {
+
+            if ( e.params.data.id > 0 | e.params.data.id != null ) {
+                $('#other_document').addClass('d-none');
+
+                if ( e.params.data.id == '999' ) {
+                    $('#other_document').removeClass('d-none');
+                }
+
+                $('.fileinput-button').removeClass('disabled');
+
+            } else {
+                $('.fileinput-button').addClass('disabled');
+            }
+
         });
 
         $('#country').select2({
@@ -35,6 +61,27 @@
                 selectState(data.id);
             }
         });
+
+        $("#document_number").keyup(function() {
+
+            if( $(this).val().length > 0 ) {
+                $('.fileinput-button').removeClass('disabled');
+            }
+            else {
+                $('.fileinput-button').addClass('disabled');
+            }
+        });
+
+        $("#other_document").keyup(function() {
+
+            if( $(this).val().length > 0 ) {
+                $('.fileinput-button').removeClass('disabled');
+            }
+            else {
+                $('.fileinput-button').addClass('disabled');
+            }
+        });
+
     });
 
     function selectState(country) {
@@ -137,19 +184,6 @@
         }
     }
 
-    function viewInputDocument() {
-        var input_document = document.getElementById('other_document');
-
-        input_document.classList.add( 'd-none' );
-
-        let identification_document = document.getElementById('identification_document').value;
-
-        if (identification_document == '999') {
-
-            input_document.classList.remove( 'd-none' );
-        }
-    }
-
 </script>
 
 
@@ -161,9 +195,17 @@
     previewNode.parentNode.removeChild(previewNode);
 
     var myDropzone = new Dropzone(document.body, {
-        url: "https://www.jose-aguilar.com/scripts/javascript/dropzone/multiple/upload.php",
+        url: '{{ route("kyc.upload") }}',
+        init: function() {
+            this.on("sending", function(file, xhr, formData) {
+                formData.append( '_token', '{{ csrf_token() }}' );
+                formData.append( 'identification_document', $('#identification_document').val() );
+                formData.append( 'other_document', $('#other_document').val() );
+                formData.append( 'document_number', $('#document_number').val() );
+            });
+        },
         paramName: "file",
-        acceptedFiles: 'image/*',
+        acceptedFiles: 'image/*,.pdf',
         maxFilesize: 2,
         maxFiles: 3,
         thumbnailWidth: 160,
@@ -173,7 +215,17 @@
         previewTemplate: previewTemplate,
         autoQueue: true,
         previewsContainer: "#previews",
-        clickable: ".fileinput-button"
+        clickable: ".fileinput-button",
+        success:function(file, response) {
+            // Do what you want to do with your response
+            // This return statement is necessary to remove progress bar after uploading.
+            alert(response.msg);
+
+            $('.fileinput-button').addClass('disabled');
+            $("#other_document").val('');
+            $("#document_number").val('');
+            $("#identification_document").val('');
+        }
     });
 
     myDropzone.on("addedfile", function(file) {
@@ -184,12 +236,12 @@
 
     // Update the total progress bar
     myDropzone.on("totaluploadprogress", function(progress) {
-        document.querySelector("#total-progress .progress-bar").style.width = progress + "%";
+        //document.querySelector("#total-progress .progress-bar").style.width = progress + "%";
     });
 
     myDropzone.on("sending", function(file) {
         // Show the total progress bar when upload starts
-        document.querySelector("#total-progress").style.opacity = "1";
+        //document.querySelector("#total-progress").style.opacity = "1";
         // And disable the start button
         file.previewElement.querySelector(".start").setAttribute("disabled", "disabled");
     });
@@ -205,17 +257,5 @@
     document.querySelector("#actions .start").onclick = function() {
         myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED));
     };
-
-    /*$('#previews').sortable({
-        items:'.file-row',
-        cursor: 'move',
-        opacity: 0.5,
-        containment: "parent",
-        distance: 20,
-        tolerance: 'pointer',
-        update: function(e, ui){
-            //actions when sorting
-        }
-    });*/
 </script>
 
