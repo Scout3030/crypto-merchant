@@ -187,12 +187,15 @@
 
                             <button class="start d-none">Start</button>
                         </div>
+                        <input type="hidden" wire:model="documents">
+                        @error('documents')
+                            <div class="form-text validation pb-3">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
 
                 <div class="row mb-4">
                     <div class="col-12">
-
                         <div class="fallback">
                             <input name="file" type="file" multiple />
                         </div>
@@ -249,8 +252,8 @@
                         <p>All fields marked with <span class="text-danger">*</span> are mandatory</p>
                     </div>
                     <div class="col-md-6 d-flex flex-row-reverse">
-                        <button wire:click.prevent="store('draft')" class="btn-next mt-3">Save as Draft</button>
-                        <button wire:click.prevent="store('next')" class="btn-next mt-3">Next</button>
+                        <button wire:click.prevent="store('draft')" class="btn-outline-primary mt-3">Save as Draft</button>
+                        <button wire:click.prevent="store('next')" class="btn-outline-primary mt-3">Next</button>
                     </div>
 
                     <div class="col-md-12">

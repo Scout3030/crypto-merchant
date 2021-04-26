@@ -225,6 +225,8 @@
             $("#other_document").val('');
             $("#document_number").val('');
             $("#identification_document").val('');
+
+            Livewire.emit('setDocuments');
         }
     });
 

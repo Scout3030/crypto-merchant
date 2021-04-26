@@ -9,6 +9,11 @@ class UserKycApplicationPerson extends Model
 {
     use HasFactory;
 
+    protected $table = 'user_kyc_applications_persons';
+
+    const DIRECTOR = 1;
+    const SHAREHOLDER = 2;
+
     protected $fillable = [
         'user_id',
         'person_name',
@@ -18,7 +23,8 @@ class UserKycApplicationPerson extends Model
         'state_other',
         'city',
         'city_other',
-        'type_person'
+        'type_person',
+        'status'
     ];
 
     public function user()

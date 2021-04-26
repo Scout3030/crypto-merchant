@@ -13,14 +13,15 @@ class KycStepOne extends Component
     public $kyc;
     public $countries, $states, $cities;
     public $full_name, $date_of_birth, $address, $country, $state, $state_other,
-        $city, $city_other, $phone_code, $phone_number, $skype_id, $tax_id;
+        $city, $city_other, $phone_code, $phone_number, $skype_id, $tax_id, $documents = 0;
 
 
     protected $listeners = [
         'setCountry' => 'setCountry',
         'setState' => 'setState',
         'setCity' => 'setCity',
-        'setCodePhone' => 'setCodePhone'
+        'setCodePhone' => 'setCodePhone',
+        'setDocuments' => 'setDocuments',
     ];
 
     public function setCountry($item)
@@ -43,6 +44,11 @@ class KycStepOne extends Component
         $this->phone_code = $item;
     }
 
+    public function setDocuments()
+    {
+        $this->documents++;
+    }
+
     protected function rules()
     {
         return [
@@ -55,7 +61,8 @@ class KycStepOne extends Component
             'city' => 'required',
             'city_other' => Rule::requiredIf( $this->city == 'other' ),
             'phone_number' => 'required',
-            'skype_id' => 'required'
+            'skype_id' => 'required',
+            'documents' => 'required|min:1'
         ];
     }
 

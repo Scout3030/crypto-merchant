@@ -46,54 +46,30 @@ class UserKycApplicationController extends Controller
         return view('kyc.step2');
     }
 
-    public function storeStep1(Request $request)
+    public function step3()
     {
-        $validator = Validator::make($request->all(), [
-            'full_name' => 'required',
-            'date_of_birth' => 'required|date',
-            'address' => 'required',
-            'country' => 'required',
-            'state' => 'required',
-            'state_other' => Rule::requiredIf( $request->state == 'other' ),
-            'city' => 'required',
-            'city_other' => Rule::requiredIf( $request->city == 'other' ),
-            'phone_number' => 'required',
-            'skype_id' => 'required',
-            'identification_document' => 'required',
-            'other_document' => Rule::requiredIf( $request->identification_document == '999' ),
-            'document_number' => 'required',
-            'image' => 'required|mimes:jpg,png,jpeg,pdf'
-        ]);
-
-        if ( $validator->fails() ) {
-
-            $states = State::select('iso2', 'name')->where('country_code', $request->country)->get();
-            $cities = City::select('id', 'name')->where('state_code', $request->state)->get();
-
-            return back()->withErrors( $validator )->withInput()->with('states', $states)->with('cities', $cities);
-        }
-
-        $input = $request->all();
-        $input['step'] = 2;
-
-        // Upload Image
-        if ( $request->hasFile('image') ) {
-            $input['upload_document'] = Storage::disk('local')->put( 'public/documents', $request->file('image') );
-        }
-
-        $user_kyc = UserKycApplication::where('user_id', Auth::id())->first();
-        $user_kyc->update( $input );
-
-
-        return view('kyc.step2')->with('success', true);
-
+        return view('kyc.step3');
     }
 
     public function upload(Request $request)
     {
+        $validator = Validator::make($request, [
+            'identification_document' => 'required|min:1',
+            'other_document' => Rule::requiredIf( $request->identification_document == '999' ),
+            'document_number' => 'required',
+            'file' => 'required'
+        ]);
+
+        if ( $validator->fails() ) {
+            return response()->json([
+                'status' => false,
+                'msg' => 'Upload failed!'
+            ]);
+        }
+
         $input = $request->all();
 
-        if ( $request->hasFile('file') ) {
+        try {
             $input['image'] = Storage::disk('local')->put( 'public/documents/', $request->file('file') );
             $input['user_id'] = Auth::id();
             $input['status'] = true;
@@ -104,12 +80,13 @@ class UserKycApplicationController extends Controller
                 'status' => true,
                 'msg' => 'Upload corrected!'
             ]);
-        } else {
+        } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
                 'msg' => 'Upload failed!'
             ]);
         }
+
 
     }
 }
