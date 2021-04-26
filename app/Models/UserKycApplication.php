@@ -26,7 +26,18 @@ class UserKycApplication extends Model
         'upload_document',
         'document_number',
         'tax_id',
-        'step'
+        'step',
+        'status',
+        'code_phone',
+        'company_name',
+        'registration_number',
+        'doing_business_as',
+        'company_address',
+        'company_country',
+        'company_state',
+        'company_state_other',
+        'company_city',
+        'company_city_other',
     ];
 
     public function user()

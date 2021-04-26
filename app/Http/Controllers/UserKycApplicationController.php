@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\File;
 
 use App\Models\Country;
 use App\Models\State;
+use App\Models\UserKycApplicationDocument;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -23,7 +24,8 @@ class UserKycApplicationController extends Controller
         if ( $data == null ) {
             $data = UserKycApplication::create([
                 'user_id' => Auth::id(),
-                'step' => 0
+                'step' => 0,
+                'status' => true
             ]);
         }
 
@@ -37,49 +39,54 @@ class UserKycApplicationController extends Controller
         $data->save();
 
         return view('kyc.step1');
-
     }
 
-    public function storeStep1(Request $request)
+    public function step2()
     {
-        $validator = Validator::make($request->all(), [
-            'full_name' => 'required',
-            'date_of_birth' => 'required|date',
-            'address' => 'required',
-            'country' => 'required',
-            'state' => 'required',
-            'state_other' => Rule::requiredIf( $request->state == 'other' ),
-            'city' => 'required',
-            'city_other' => Rule::requiredIf( $request->city == 'other' ),
-            'phone_number' => 'required',
-            'skype_id' => 'required',
-            'identification_document' => 'required',
+        return view('kyc.step2');
+    }
+
+    public function step3()
+    {
+        return view('kyc.step3');
+    }
+
+    public function upload(Request $request)
+    {
+        $validator = Validator::make($request, [
+            'identification_document' => 'required|min:1',
             'other_document' => Rule::requiredIf( $request->identification_document == '999' ),
             'document_number' => 'required',
-            'image' => 'required|mimes:jpg,png,jpeg,pdf'
+            'file' => 'required'
         ]);
 
         if ( $validator->fails() ) {
-
-            $states = State::select('iso2', 'name')->where('country_code', $request->country)->get();
-            $cities = City::select('id', 'name')->where('state_code', $request->state)->get();
-
-            return back()->withErrors( $validator )->withInput()->with('states', $states)->with('cities', $cities);
+            return response()->json([
+                'status' => false,
+                'msg' => 'Upload failed!'
+            ]);
         }
 
         $input = $request->all();
-        $input['step'] = 2;
 
-        // Upload Image
-        if ( $request->hasFile('image') ) {
-            $input['upload_document'] = Storage::disk('local')->put( 'public/documents', $request->file('image') );
+        try {
+            $input['image'] = Storage::disk('local')->put( 'public/documents/', $request->file('file') );
+            $input['user_id'] = Auth::id();
+            $input['status'] = true;
+
+            UserKycApplicationDocument::create($input);
+
+            return response()->json([
+                'status' => true,
+                'msg' => 'Upload corrected!'
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'msg' => 'Upload failed!'
+            ]);
         }
 
-        $user_kyc = UserKycApplication::where('user_id', Auth::id())->first();
-        $user_kyc->update( $input );
-
-
-        return view('kyc.step2')->with('success', true);
 
     }
 }

@@ -1,21 +1,11 @@
 <div>
-    <form class="formLogin row" wire:submit.prevent="store" enctype="multipart/form-data">
-
-        @csrf
-        @if ( Session::has('success') )
-            <div class="alert alert-success" role="alert">
-                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
-                    <polyline points="9 11 12 14 22 4"></polyline>
-                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
-                </svg> <strong>Success!</strong> Registration created successfully!
-            </div>
-        @endif
+    <form class="formLogin row">
 
         <div class="card shadow mb-5">
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label for="form-label">Full name</label>
+                        <label for="form-label">Full name <span class="text-danger">*</span></label>
                         <input type="text"
                             wire:model="full_name"
                             class="form-control @error('full_name') validation @enderror"
@@ -26,7 +16,7 @@
                         @enderror
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="form-label">Date Of Birth</label>
+                        <label for="form-label">Date Of Birth <span class="text-danger">*</span></label>
                         <input type="date"
                             wire:model="date_of_birth"
                             class="form-control @error('date_of_birth') validation @enderror"
@@ -36,33 +26,32 @@
                         @enderror
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="form-label">Address</label>
-                        <input type="text" name="address" class="form-control @error('address') validation @enderror" placeholder="Enter Your Address" value="{{ old('address') }}">
+                        <label for="form-label">Address <span class="text-danger">*</span></label>
+                        <input type="text"
+                            wire:model="address"
+                            class="form-control @error('address') validation @enderror"
+                            placeholder="Enter Your Address"
+                            >
                         @error('address')
                             <div class="form-text validation pb-3">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="form-label">Country</label>
-                        <select id="country" name="country" class="form-select @error('country') validation @enderror" onchange="selectCountry()">
-                            <option selected disabled>Open this select menu</option>
+                    <div wire:ignore class="col-md-6 mb-3">
+                        <label for="form-label">Country <span class="text-danger">*</span></label>
+                        <select id="country"class="form-control @error('country') validation @enderror">
+                            <option selected disabled>Select Country</option>
                             @foreach ($countries as $country)
-                            <option value="{{ $country->iso2 }}" {{ old('country') == $country->iso2 ? 'selected' : '' }}>{{ $country->name }}</option>
+                            <option value="{{ $country->iso2 }}">{{ $country->name }}</option>
                             @endforeach
                         </select>
                         @error('country')
                             <div class="form-text validation pb-3">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="form-label">State</label>
-                        <select id="state" name="state" class="form-select @error('state') validation @enderror">
-                            @if ( Session::has('states') )
-                                @foreach (Session::get('states') as $state)
-                                    <option value="{{ $state->iso2 }}" {{ old('state') == $state->iso2 ? 'selected' : '' }}>{{ $state->name }}</option>
-                                @endforeach
-                                <option value="other" {{ old('state') == 'other' ? 'selected' : '' }}>Other</option>
-                            @endif
+                    <div wire:ignore class="col-md-6 mb-3">
+                        <label for="form-label">State <span class="text-danger">*</span></label>
+                        <select id="state" class="form-control @error('state') validation @enderror">
+                            <option selected disabled>Select State</option>
                         </select>
                         @error('state')
                             <div class="form-text validation pb-3">{{ $message }}</div>
@@ -70,23 +59,18 @@
 
                         <input type="text"
                             id="other_state"
-                            name="state_other"
-                            class="form-control mt-2 @if(old('state') != 'other') d-none @endif @error('state_other') validation @enderror"
+                            wire:model="state_other"
+                            class="form-control mt-2 d-none @error('state_other') validation @enderror"
                             placeholder="Enter your Other State"
-                            value="{{ old('state_other') }}">
+                            >
                         @error('state_other')
                             <div class="form-text validation pb-3">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="form-label">City</label>
-                        <select id="city" name="city" class="form-select @error('city') validation @enderror">
-                            @if ( Session::has('cities') )
-                                @foreach (Session::get('cities') as $city)
-                                    <option value="{{ $city->id }}" {{ old('city') == $city->id ? 'selected' : '' }}>{{ $city->name }}</option>
-                                @endforeach
-                                <option value="other" {{ old('city') == 'other' ? 'selected' : '' }}>Other</option>
-                            @endif
+                    <div wire:ignore class="col-md-6 mb-3">
+                        <label for="form-label">City <span class="text-danger">*</span></label>
+                        <select id="city" class="form-control @error('city') validation @enderror">
+                            <option selected disabled>Select City</option>
                         </select>
                         @error('city')
                             <div class="form-text validation pb-3">{{ $message }}</div>
@@ -94,86 +78,168 @@
 
                         <input type="text"
                             id="other_city"
-                            name="city_other"
-                            class="form-control mt-2 @if( old('city') != 'other' ) d-none @endif @error('city_other') validation @enderror"
+                            wire:model="city_other"
+                            class="form-control mt-2 d-none @error('city_other') validation @enderror"
                             placeholder="Enter your Other City"
-                            value="{{ old('city_other') }}">
+                            >
                         @error('city_other')
                             <div class="form-text validation pb-3">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="form-label">Phone Number *</label>
-                        <select class="form-control @error('phone_number') validation @enderror">
-                            <option value="+1">+1</option>
-                            <option value="+51">+51</option>
+                    <div wire:ignore class="col-md-6 mb-3">
+                        <label for="form-label">Phone Number <span class="text-danger">*</span></label>
+                        <select id="phone_code" class="form-control @error('phone_number') validation @enderror">
+                            @foreach ($countries as $country)
+                            <option value="{{ $country->phonecode }}">{{ $country->phonecode }}</option>
+                            @endforeach
                         </select>
-                        <input type="text" name="phone_number" class="form-control @error('phone_number') validation @enderror" value="{{ old('phone_number') }}">
+                        <input type="text"
+                            wire:model="phone_number"
+                            class="form-control mt-2 @error('phone_number') validation @enderror"
+                            placeholder="Enter Phone Number"
+                            >
                         @error('phone_number')
                             <div class="form-text validation pb-3">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="form-label">Skype ID</label>
-                        <input type="text" name="skype_id" class="form-control @error('skype_id') validation @enderror" value="{{ old('skype_id') }}">
+                        <label for="form-label">Skype ID <span class="text-danger">*</span></label>
+                        <input type="text"
+                            wire:model="skype_id"
+                            class="form-control @error('skype_id') validation @enderror"
+                            placeholder="Enter Skype ID"
+                            >
                         @error('skype_id')
                             <div class="form-text validation pb-3">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="form-label">Tax ID (Optional)</label>
-                        <input type="text" name="tax_id" class="form-control @error('tax_id') validation @enderror" value="{{ old('tax_id') }}">
+                        <input type="text"
+                            wire:model="tax_id"
+                            class="form-control @error('tax_id') validation @enderror"
+                            placeholder="Enter Tax ID"
+                            >
                         @error('tax_id')
                             <div class="form-text validation pb-3">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
-
             </div>
         </div>
 
         <div class="card shadow mb-5">
+            <div class="card-header">
+                <div class="card-title">
+                    <h4>DOCUMENTS</h4>
+                </div>
+            </div>
             <div class="card-body">
-                <div class="col-md-6 mb-3">
-                    <label for="form-label">Identification Document</label>
-                    <select id="identification_document" name="identification_document" class="form-select @error('identification_document') validation @enderror" onchange="viewInputDocument()">
-                        <option value="1" {{ old('identification_document') == 1 ? 'checked' : '' }}>Passport</option>
-                        <option value="2" {{ old('identification_document') == 2 ? 'checked' : '' }}>Certificate of incorporation</option>
-                        <option value="3" {{ old('identification_document') == 3 ? 'checked' : '' }}>Share Certificates</option>
-                        <option value="4" {{ old('identification_document') == 4 ? 'checked' : '' }}>MOU(s)</option>
-                        <option value="5" {{ old('identification_document') == 5 ? 'checked' : '' }}>Article of Incorporation</option>
-                        <option value="6" {{ old('identification_document') == 6 ? 'checked' : '' }}>Proof of Address</option>
-                        <option value="7" {{ old('identification_document') == 7 ? 'checked' : '' }}>Bank Statements</option>
-                        <option value="8" {{ old('identification_document') == 8 ? 'checked' : '' }}>Letter from bank for good standing</option>
-                        <option value="999" {{ old('identification_document') == 999 ? 'checked' : '' }}>Other</option>
-                    </select>
-                    @error('identification_document')
-                        <div class="form-text validation pb-3">{{ $message }}</div>
-                    @enderror
-                    <input type="text"
-                        id="other_document"
-                        name="other_document"
-                        class="form-control mt-2 @if( old('other_document') == null ) d-none @endif @error('other_document') validation @enderror"
-                        placeholder="Enter your Other Identification Document"
-                        value="{{ old('other_document') }}">
+                <div class="row mb-4">
+                    <div wire:ignore class="col-md-4 mb-3">
+                        <label for="form-label">Identification Document  <span class="text-danger">*</span></label>
+                        <select id="identification_document"
+                            name="identification_document"
+                            class="form-select @error('identification_document') validation @enderror">
+                            <option value="" selected disabled>Enter Identification Document</option>
+                            <option value="1">Passport</option>
+                            <option value="2">Certificate of incorporation</option>
+                            <option value="3">Share Certificates</option>
+                            <option value="4">MOU(s)</option>
+                            <option value="5">Article of Incorporation</option>
+                            <option value="6">Proof of Address</option>
+                            <option value="7">Bank Statements</option>
+                            <option value="8">Letter from bank for good standing</option>
+                            <option value="999">Other</option>
+                        </select>
+                        @error('identification_document')
+                            <div class="form-text validation pb-3">{{ $message }}</div>
+                        @enderror
 
-                    @error('other_document')
-                        <div class="form-text validation pb-3">{{ $message }}</div>
-                    @enderror
+                        <input type="text"
+                            id="other_document"
+                            name="other_document"
+                            class="form-control mt-2 d-none @error('other_document') validation @enderror"
+                            placeholder="Enter your Other Identification Document"
+                            >
+                        @error('other_document')
+                            <div class="form-text validation pb-3">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="form-label">Document Number <span class="text-danger">*</span></label>
+                        <input type="text"
+                            id="document_number"
+                            name="document_number"
+                            class="form-control @error('document_number') validation @enderror"
+                            placeholder="Enter Document Number"
+                            >
+                        @error('document_number')
+                            <div class="form-text validation pb-3">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div id="actions">
+                            <span class="btn btn-success fileinput-button disabled">
+                                <i class="flaticon-381-networking"></i>
+                                <span>UPLOAD</span>
+                            </span>
+
+                            <button class="start d-none">Start</button>
+                        </div>
+                        <input type="hidden" wire:model="documents">
+                        @error('documents')
+                            <div class="form-text validation pb-3">{{ $message }}</div>
+                        @enderror
+                    </div>
                 </div>
-                <div class="col-md-6 mb-3">
-                    <label for="form-label">Upload Document</label>
-                    <input type="file" name="image" class="form-control @error('image') validation @enderror" accept="image/*,.pdf">
-                    @error('image')
-                        <div class="form-text validation pb-3">{{ $message }}</div>
-                    @enderror
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label for="form-label">Document Number</label>
-                    <input type="text" name="document_number" class="form-control @error('document_number') validation @enderror" value="{{ old('document_number') }}">
-                    @error('document_number')
-                        <div class="form-text validation pb-3">{{ $message }}</div>
-                    @enderror
+
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="fallback">
+                            <input name="file" type="file" multiple />
+                        </div>
+
+                        <div class="table table-striped files" id="previews">
+                            <div id="template" class="file-row row">
+                                <!-- This is used as the file preview template -->
+                                <div class="col-xs-12 col-lg-3">
+                                    <span class="preview" style="width:160px;height:160px;">
+                                        <img data-dz-thumbnail />
+                                    </span>
+                                    <br/>
+                                    <button class="btn btn-primary start" style="display:none;">
+                                        <i class="glyphicon glyphicon-upload"></i>
+                                        <span>Empezar</span>
+                                    </button>
+                                    <button data-dz-remove class="btn btn-warning cancel">
+                                        <i class="icon-ban-circle fa fa-ban-circle"></i>
+                                        <span>Cancelar</span>
+                                    </button>
+                                    <button data-dz-remove class="btn btn-danger delete">
+                                        <i class="icon-trash fa fa-trash"></i>
+                                        <span>Eliminar</span>
+                                    </button>
+                                </div>
+                                <div class="col-xs-12 col-lg-9">
+                                    <p class="name" data-dz-name></p>
+                                    <p class="size" data-dz-size></p>
+                                    <div>
+                                        <strong class="error text-danger" data-dz-errormessage></strong>
+                                    </div>
+                                    <div>
+                                        <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                                            <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- <div class="dropzone-here">Drop files here to upload.</div> --}}
+
+
+                    </div>
                 </div>
             </div>
         </div>
@@ -186,8 +252,8 @@
                         <p>All fields marked with <span class="text-danger">*</span> are mandatory</p>
                     </div>
                     <div class="col-md-6 d-flex flex-row-reverse">
-                        <button type="submit" class="btn-next mt-3">Save as Draft</button>
-                        <button type="submit" class="btn-next mt-3">Next</button>
+                        <button wire:click.prevent="store('draft')" class="btn-outline-primary mt-3">Save as Draft</button>
+                        <button wire:click.prevent="store('next')" class="btn-outline-primary mt-3">Next</button>
                     </div>
 
                     <div class="col-md-12">

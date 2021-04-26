@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{{ asset('fonts/flaticon.css') }}">
 	<link rel="stylesheet" href="{{ asset('css/main.css') }}">
     <link rel="stylesheet" href="{{ mix('css/plugins.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/plugins/dropzone.css') }}">
 	<title>CryptoMatix - Dashboard</title>
 
     @livewireStyles
@@ -48,7 +49,7 @@
 
 		<main>
 			<div class="container-fluid">
-
+                <div class="loading" style="background: url({{ asset('img/loading.gif') }}) center center no-repeat scroll rgba(45, 45, 45, 0.5);"></div>
                 {{ $slot }}
 
 			</div>
@@ -58,6 +59,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/plugins/dropzone.min.js') }}"></script>
 
     @livewireScripts
 
