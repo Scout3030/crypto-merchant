@@ -34,7 +34,9 @@ class User extends Authenticatable
         'roles',
         'timezone',
         'date_format',
-        'role_id'
+        'role_id',
+        'otp_expiration_time',
+        'otp_tries'
     ];
 
     /**
@@ -56,6 +58,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'otp_expiration_time' => 'datetime',
     ];
 
     /**

@@ -9,7 +9,7 @@
                 <h2>One Time Password</h2>
                 <p>Enter the OTP, you have received at your registered email address</p>
 
-                <form class="formLogin" action="{{ route('auth.login.verify') }}" method="POST">
+                <form class="formLogin" action="{{ route('auth.login.verify') }}" method="POST" novalidate>
                     @csrf
 
                     @if ( Session::has('message') )
@@ -17,14 +17,19 @@
                     @endif
 
                     <div class="mb-3">
-                        <label class="form-label">One Time Password</label>
-                        <input type="password" name="otp_token" class="form-control @error('otp_token') validation @enderror" placeholder="Enter the OTP">
-                        @error('otp_token')
-                            <div class="form-text validation pb-3">{{ $message }}</div>
-                        @enderror
+                        <label for="otp_token" class="form-label">One Time Password</label>
+                        <input id="otp_token"
+                               type="password"
+                               name="otp_token"
+                               class="form-control @error('otp_token') validation @enderror"
+                               placeholder="Enter the OTP"
+                        >
                     </div>
+                    @error('otp_token')
+                    <div class="form-text validation pb-3">{{ $message }}</div>
+                    @enderror
                     <button type="submit" class="btn btn-primary">Verify</button>
-                    <div class="form-text">Did not recieve the OTP code?
+                    <div class="form-text">Did not receive the OTP code?
                         <a class="send-otp-button" href="#"
                             onclick="event.preventDefault();
                             console.log('here')
@@ -38,7 +43,6 @@
                     @csrf
                     <input type="hidden" value="{{ Session::get('otp-email') }}">
                 </form>
-
             </div>
         </div>
     </div>

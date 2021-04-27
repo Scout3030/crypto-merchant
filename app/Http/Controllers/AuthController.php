@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Roles;
 use App\Http\Requests\NewPasswordRequest;
+use App\Http\Requests\VerifyLoginTokenRequest;
 use App\Mail\NewPasswordMail;
+use App\Providers\RouteServiceProvider;
 use PHPUnit\Exception;
 use Segment;
 use stdClass;
@@ -131,7 +133,7 @@ class AuthController extends Controller {
     public function login(Request $request)
     {
         $this->validateLogin($request);
-        session()->put('user-email', $request->email);
+        session()->put('otp-email', $request->email);
         $user = User::whereEmail($request->email)->first();
         if(!$user) return back()->withErrors('Incorrect credentials.');
         if (Hash::check($request->password, $user->password)) {
@@ -156,36 +158,28 @@ class AuthController extends Controller {
         return back()->withErrors(['email' => 'Incorrect credentials.']);
     }
 
-    public function verifyLoginToken(Request $request)
+    public function verifyLoginToken(VerifyLoginTokenRequest $request)
     {
-      $request->validate([
-        'otp_token' => 'required'
-      ]);
+        $email = session()->get('user-email');
+        $user = User::whereEmail($email)->first();
 
-      $otp_token = $request->otp_token;
-      $email = session()->get('user-email');
-      $user = User::whereEmail($email)->first();
-
-      if ($user->otp_token == $otp_token && $user->token_status == (string) User::ACTIVED_TOKEN) {
         $user->fill([
           'otp_token' => null,
           'token_status' => (string) User::INACTIVED_TOKEN,
         ])->save();
+
         Auth::loginUsingId($user->id);
+
         session()->forget('user-email');
 
         if ($user->first_login == (string) User::YES) {
-          $user->first_login = (string) User::NO;
+            $user->first_login = (string) User::NO;
+            $user->save();
 
-          $user->save();
-
-          return redirect()->route('auth.change.password');
+            return redirect()->route('auth.change.password');
         }
 
-        return redirect('/');
-      }
-
-      return back()->withErrors(['otp_token' => 'The OTP TOKEN is invalid.']);
+        return redirect(RouteServiceProvider::HOME);
     }
 
     public function updatePassword(){
@@ -213,12 +207,14 @@ class AuthController extends Controller {
     }
 
     public function sendOTPCode(){
-        $email = session()->get('user-email');
+        $email = session()->get('otp-email');
         $token = rand(100000,999999);
         $user = User::whereEmail($email)->first();
         $user->fill([
             'otp_token' => $token,
-            'token_status' => (string) User::ACTIVED_TOKEN
+            'token_status' => (string) User::ACTIVED_TOKEN,
+            'otp_expiration_time' => now()->format('Y-m-d H:i:s'),
+            'otp_tries' => 0
         ])->save();
 
         try {
